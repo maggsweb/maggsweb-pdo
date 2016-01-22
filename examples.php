@@ -50,14 +50,13 @@ echo "<hr><p>4. Select single value using a 'bind' param & 'query'</p>";
 //dumpr($resultOne);
 //dumpr($db->getError());
 //-----------------------------------------------------------------
+echo "<h2>Insert</h2>";
+//-----------------------------------------------------------------
 echo "<hr><p>5. Insert a record using SQL & 'query'</p>";
 //$sql = "INSERT INTO twitter (title,link,description) VALUES ('A title', 'A link', 'A Description')";
 //$db->query($sql);
 //dumpr($db->execute());
 //dumpr($db->getError());
-//-----------------------------------------------------------------
-
-echo "<h2>Insert</h2>";
 //-----------------------------------------------------------------
 echo "<hr><p>6. Insert a record using 'bind' params and 'query'</p>";
 //$sql = "INSERT INTO twitter (title,link,description) VALUES (:title, :link, :description)";
