@@ -1,6 +1,9 @@
 <?php 
 
+// Include db class file
+// Instantiate $db as a db connection
 include 'index.php';
+//-----------------------------------------------------------------
 
 
 
