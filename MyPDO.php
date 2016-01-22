@@ -103,7 +103,7 @@ class MyPDO {
     
     
     /**
-     * @desc Fetch a simngle row as an Object or an Array
+     * @desc Fetch a single row as an Object or an Array
      * @param type $type
      * @return type
      */

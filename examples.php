@@ -1,16 +1,7 @@
 <?php 
 
-define('DB_HOST', '');
-define('DB_USER', '');
-define('DB_PASS', '');
-define('DB_NAME', '');
+include 'index.php';
 
-require_once 'classes/MyPDO.class.php';
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
-$db = new MyPDO();
-dumpr($db);
 
 echo "<h2>Query</h2>";
 //-----------------------------------------------------------------
