@@ -7,6 +7,8 @@ A 'Work in progress' Database wrapper for PHP using MySQL and PDO
 **[Raw Query](#query)**
 **[SQL Select](#sql-select)**
 
+
+
 ### Initialization
 To use this class, download and include 'MyPDO.php' into your project.
 
