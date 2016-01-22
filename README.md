@@ -17,8 +17,6 @@ require_once ('MyPDO.php');
 
 
 ### Raw Query
-
-
 asd fa sdf as df asdf a sdf asd ff 
 asd fa sdf as df asdf a sdf asd ff 
 asd fa sdf as df asdf a sdf asd ff 
@@ -29,8 +27,6 @@ asd fa sdf as df asdf a sdf asd ff
 
 
 ### SQL Select
-
-
 asd fa sdf as df asdf a sdf asd ff 
 asd fa sdf as df asdf a sdf asd ff 
 asd fa sdf as df asdf a sdf asd ff 
