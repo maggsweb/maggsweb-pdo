@@ -1,5 +1,5 @@
 # MyPDO
-My 'Work in progress' PHP Database wrapper for PDO
+A 'Work in progress' Database wrapper for PHP using MySQL and PDO
 <hr>
 
 ### Table of Contents
