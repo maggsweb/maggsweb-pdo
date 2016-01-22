@@ -129,14 +129,28 @@ echo "<hr><p>11. Update specific records using a 'where' array and 'update', and
 //dumpr($db->getError());
 //dumpr($db->rowCount());
 //-----------------------------------------------------------------
-
-
-
-
 echo "<h2>Delete</h2>";
 //-----------------------------------------------------------------
-
-
+echo "<hr><p>12. Delete records using a 'where' string, and show number of records deleted.</p>";
+//$table = 'twitter';
+//$where = "pubDate = '0000-00-00 00:00:00'";
+//$delete = $db->delete($table,$where);
+//dumpr($delete);
+//dumpr($db->getQuery());
+//dumpr($db->getError());
+//dumpr($db->rowCount());
+//-----------------------------------------------------------------
+echo "<hr><p>13. Delete records using a 'where' array, and show number of records deleted.</p>";
+//$table = 'twitter';
+//$where = array();
+//$where['title'] = 'update';
+//$where['link']  = 'delete';
+//$delete = $db->delete($table,$where);
+//dumpr($delete);
+//dumpr($db->getQuery());
+//dumpr($db->getError());
+//dumpr($db->rowCount());
+//-----------------------------------------------------------------
 
 
 
