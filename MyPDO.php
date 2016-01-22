@@ -31,15 +31,22 @@ class MyPDO {
     }
     
     
-    // Set Query
+    /**
+     * @desc Prepare the raw SQL
+     * @param type $query
+     */
     public function query($query)
     {
         $this->stmt = $this->dbh->prepare($query);
     }
     
-    // Bind any db values
-    // This step is optional if the query does not need any values, 
-    // or if all the values are in the query (legacy)
+    
+    /**
+     * @desc Bind a specific column/value
+     * @param type $param
+     * @param type $value
+     * @param type $type
+     */
     public function bind($param, $value, $type=NULL)
     {
         if (is_null($type)) {
@@ -60,8 +67,11 @@ class MyPDO {
         $this->stmt->bindValue($param, $value, $type);
     }
     
-    // Run query
-    // This is called automatically when fetching results
+    
+    /**
+     * @desc Run Query!  This is called automatically when fetching results
+     * @return type
+     */
     public function execute()
     {
         try {
@@ -73,7 +83,12 @@ class MyPDO {
         return $this->stmt->errorCode() === '00000';
     }
     
-    // Multiple Rows
+    
+    /**
+     * @desc Fetch multiple rows as ObjectArray or MultiDemensional Array
+     * @param type $type
+     * @return type
+     */
     public function fetchAll($type='Object')
     {
         $this->execute();
@@ -86,7 +101,12 @@ class MyPDO {
         }
     }
     
-    // Single Row
+    
+    /**
+     * @desc Fetch a simngle row as an Object or an Array
+     * @param type $type
+     * @return type
+     */
     public function fetchRow($type='Object')
     {
         $this->execute();
@@ -99,13 +119,51 @@ class MyPDO {
         }
     }
     
-    // Single Value
-    public function fetchOne() 
+    
+    
+    public function select($table, $columns=' * ', $where=false, $limit=false)
     {
-        $this->execute();
-        $resultArray = $this->stmt->fetch(PDO::FETCH_ASSOC);
-        return array_shift($resultArray);
+        // Build QUERY
+        $query = "SELECT $columns FROM $table ";
+        
+        // Build the WHERE
+        $query .= $this->buildWhereString($where);
+        
+        // order by
+        // direction
+        // limit
+        
+        $this->stmt = $this->dbh->prepare($query);
+        
+        // Bind Where Params
+        $this->bindWhereParameters($where);
+        
+        // Run!
+        return $this->fetchAll();
     }
+    
+    
+    public function selectRow($table, $columns=' * ', $where=false)
+    {
+        // Build QUERY
+        $query = "SELECT $columns FROM $table ";
+        
+        // Build the WHERE
+        $query .= $this->buildWhereString($where);
+        
+        // order by
+        // direction
+        // limit
+        
+        $this->stmt = $this->dbh->prepare($query);
+        
+        // Bind Where Params
+        $this->bindWhereParameters($where);
+        
+        // Run!
+        return $this->fetchRow();
+    }
+
     
     /**
      * 
@@ -115,30 +173,29 @@ class MyPDO {
      */
     public function insert($table, $columns=false)
     {
-        if(is_array($columns)){
-            // Build COLUMNS
-            $columns = array();
-            $binders = array();
-            foreach ($columns as $key => $value){
-                $columns[] = $key;
-                $binders[] = ':'.$key;
+        // Check $columns
+        if( !$columns || !is_array($columns)) {
+            $this->error = 'PDO Insert error: Parameter 2 must be an array';
+            return false;
             }
-            $columnsArrayString = implode(', ',$columns);
-            $bindersArrayString = implode(', ',$binders);
+            
+        $columnString = $this->buildColumnString($columns);
+        $binderString = $this->buildBindString($columns);
+
             // Build QUERY
-            $query = "INSERT INTO $table ($columnsArrayString) VALUES ($bindersArrayString);";
+        $query = "INSERT INTO $table ($columnString) VALUES ($binderString);";
+
             // Prepare Query
             $this->stmt = $this->dbh->prepare($query);
+        
             // Bind Column Params
             foreach ($columns as $key => $value){
-                $this->bind(":$key", $value);
+            $this->bind(":column_$key", $value);
             }
             // Run!
             return $this->execute();
+     
         }
-        $this->error = 'PDO Insert error: Column Array missing';
-        return false;
-    }
     
     /**
      * 
@@ -151,81 +208,77 @@ class MyPDO {
      */
     public function update($table, $columns=false, $where=false, $limit=false)
     {
-        if(is_array($columns)){
-            // Build COLUMNS
-            $binders = array();
-            foreach ($columns as $key => $value){
-                $binders[] = "$key = :column_$key";
+        // Check $columns
+        if( !$columns || !is_array($columns)) {
+            $this->error = 'PDO Update error: Parameter 2 must be an array';
+            return false;
             }
-            $bindersString = implode(', ',$binders);
-            // Build the QUERY
-            $query = "UPDATE $table SET $bindersString";
+            
+        $query = "UPDATE $table SET ";
+
+        // Build column bindings
+        $query .= $this->buildColumnBindString($columns);
+
             // Build the WHERE
-            if(is_array($where)){
-                // If $where is an array, all WHERE operators will be '='
-                $clauses = array();
-                foreach ($where as $key => $value){
-                    $clauses[] = "$key = :where_$key";
-                }
-                $query .= " WHERE ".implode(' AND ',$clauses);
-            } else {
-                // $where is treated as a string
-                // replace all case versions of 'where'
-                $query .= " WHERE ".preg_replace("/where/i", "", $where);
-            }
+        $query .= $this->buildWhereString($where);
+
+        // Build LIMIT
             if($limit){
                 $limitInt = (int)$limit;
                 $query .= " LIMIT $limitInt";
             }
+
             // Prepare Query
             $this->stmt = $this->dbh->prepare($query);
+
             // Bind Column Params
             foreach ($columns as $key => $value){
                 $this->bind(":column_$key", $value);
             }
-            // Bind Where Params if $where is_array
-            if(is_array($where)){
-                foreach($where as $key => $value){
-                    $this->bind(":where_$key", $value);
-                }
-            }
+
+        // Bind Where Params
+        $this->bindWhereParameters($where);
+
             // Run!
             return $this->execute();
+
         }
-        $this->error = 'PDO Update error: Column Array missing';
-        return false;
-    }
     
     
     /**
      * 
      * @param type $table
-     * @param type $whereString
-     * @param type $whereParams
+     * @param type $where
      * @param type $limit
      * @return type
      */
-    public function delete($table, $whereString=false, $whereParams=false, $limit=false)
+    public function delete($table, $where=false, $limit=false)
     {
         // Build the Query
         $query = "DELETE FROM $table";
-        if($whereString){
-            $query .= " WHERE $whereString";
-        }
+       
+        // Build the WHERE
+        $query .= $this->buildWhereString($where);
+        
+        // Build LIMIT
         if($limit){
-            $query .= " LIMIT $limit";
+            $limitInt = (int)$limit;
+            $query .= " LIMIT $limitInt";
         }
+        
         // Prepare Query
         $this->stmt = $this->dbh->prepare($query);
+        
         // Bind Where Params
-        if($whereParams){
-            foreach($whereParams as $key => $value){
-                $this->bind(":$key", $value);
-            }
-        }
+        $this->bindWhereParameters($where);
+        
         // Run!
         return $this->execute();
     }
+    
+    
+    
+    
     
     
     // Num-affected-rows for INSERT/UPDATE/DELETE
@@ -256,9 +309,93 @@ class MyPDO {
     }
     
 
+    //  ----------------------------------------------------------------
+    //  PRIVATE FUNCTIONS  ---------------------------------------------
+    //  ----------------------------------------------------------------
     
+    /**
+     * 
+     * @param type $where
+     * @return type
+     */
+    private function buildWhereString($where)
+    {
+        $whereString = '';
+        if($where){
+            $whereString .= " WHERE ";
+            if(is_array($where)){
+                // If $where is an array, all WHERE operators will be '='
+                $clauses = array();
+                foreach ($where as $key => $value){
+                    $clauses[] = "$key = :where_$key";
+                }
+                $whereString .= implode(' AND ',$clauses);
+            } else {
+                // $where is treated as a string
+                // replace all case versions of 'where'
+                $whereString .= preg_replace("/where/i", "", $where);
+            }
+        }
+        return $whereString;
+    }
     
 
+    /**
+     * @param type $where
+     */
+    private function bindWhereParameters($where)
+    {
+        if($where){
+            if(is_array($where)){
+                foreach($where as $key => $value){
+                    $this->bind(":where_$key", $value);
+                }
+            }
+        }
+    }
+    
+    
+    /**
+     * @param type $columns
+     * @return type
+     */
+    private function buildColumnBindString($columns)
+    {
+        if( $columns && is_array($columns)) {
+            $binders = array();
+            foreach ($columns as $key => $value){
+                $binders[] = "$key = :column_$key";
+            }
+            return (string)implode(', ',$binders);
+        }
+    }
+    
+    
+    /**
+     * @param type $columns
+     * @return type
+     */
+    private function buildColumnString($columns)
+    {
+        $tmp = array();
+        foreach ($columns as $key => $value){
+           $tmp[] = $key;
+        }
+        return (string)implode(', ',$tmp);
+    }
+    
+    /**
+     * @param type $columns
+     * @return type
+     */
+    private function buildBindString($columns)
+    {
+        $tmp = array();
+        foreach ($columns as $key => $value){
+            $tmp[] = ':column_'.$key;
+        }
+        return (string)implode(', ',$tmp);
+    }
     
     
     //return preg_replace_callback('/:([0-9a-z_]+)/i', array($this, '_debugReplace'), $q);
