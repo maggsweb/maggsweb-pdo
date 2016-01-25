@@ -7,7 +7,8 @@ A 'Work in progress' Database wrapper for PHP using MySQL and PDO
 **[Raw Query](#raw-query)**  
 **[SQL Select](#sql-select)**  
 
-**[test](#test)**  
+
+
 
 
 ### Initialization
@@ -19,13 +20,47 @@ require_once ('MyPDO.php');
 
 
 
+
+
+
+
 ### Raw Query
-asd fa sdf as df asdf a sdf asd ff 
-asd fa sdf as df asdf a sdf asd ff 
-asd fa sdf as df asdf a sdf asd ff 
-asd fa sdf as df asdf a sdf asd ff 
-asd fa sdf as df asdf a sdf asd ff 
-asd fa sdf as df asdf a sdf asd ff 
+To execute a raw string of SQL:
+- pass the complete SQL string to ->query.
+- call ->execute (returns true|false)
+
+On success:
+- call ->rowCount to return the number of rows updated (if applicable)
+
+On failure:
+- call ->getError to display the SQL error message
+
+```php
+$sql = "CREATE TABLE `names` (
+    `id`          int(5)      NOT NULL AUTO_INCREMENT,
+    `firstname`   varchar(50) DEFAULT NULL,
+    `surname`     varchar(50) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+);";
+
+$sql = "INSERT INTO `names` VALUES 
+    (NULL, 'Chris',  'Maggs'),
+    (NULL, 'Chris2', 'Maggs2'),
+    (NULL, 'Chris3', 'Maggs3');";
+
+$db->query($sql);
+
+if($db->execute() ){
+    echo $db->rowCount() . ' records inserted';
+} else {
+    echo $db->getError();
+}
+```
+
+
+
+
+
 
 
 
@@ -49,22 +84,3 @@ asd fa sdf as df asdf a sdf asd ff
 
 
 
-
-
-
-
-
-
-
-
-
-
-### test
-sd fa sdf asd fa sdf asd fa sf d
-sd fa sdf asd fa sdf asd fa sf d
-sd fa sdf asd fa sdf asd fa sf d
-sd fa sdf asd fa sdf asd fa sf d
-sd fa sdf asd fa sdf asd fa sf d
-sd fa sdf asd fa sdf asd fa sf d
-sd fa sdf asd fa sdf asd fa sf d
-sd fa sdf asd fa sdf asd fa sf d

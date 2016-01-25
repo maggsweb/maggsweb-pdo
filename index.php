@@ -3,21 +3,24 @@
 /**
  * Define database connection as constants
  */
-define('DB_HOST', '');
-define('DB_USER', '');
+define('DB_HOST', '127.0.0.1');
+define('DB_USER', 'root');
+define('DB_NAME', 'pdotest');
 define('DB_PASS', '');
-define('DB_NAME', '');
 
 /**
  * Include MyPDO class file
  */
-require_once 'MyPDO.class.php';
+require_once 'MyPDO.php';
 
+//include 'dumpr.php';
+//dumpr(time());
 
 /**
- * Instnatiate class for use
+ * Instantiate DB class for use
  */
 $db = new MyPDO();
+//dumpr($db);
 
 //See examples.php for usage examples
 

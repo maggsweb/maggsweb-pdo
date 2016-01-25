@@ -5,17 +5,54 @@
 include 'index.php';
 //-----------------------------------------------------------------
 
-
-
 echo "<h2>Query</h2>";
+
 //-----------------------------------------------------------------
-echo "<hr><p>1. Run a query, any query..</p>";
-//$sql = "TRUNCATE twitter";
+echo "<h3>Run a query, any query..</h3>";
+
+//$sql = "CREATE TABLE `names` (
+//    `id`          int(5)      NOT NULL AUTO_INCREMENT,
+//    `firstname`   varchar(50) DEFAULT NULL,
+//    `surname`     varchar(50) DEFAULT NULL,
+//    PRIMARY KEY (`id`)
+//);";
+//
+//$sql = "INSERT INTO `names` VALUES 
+//    (NULL, 'Chris',  'Maggs'),
+//    (NULL, 'Chris2', 'Maggs2'),
+//    (NULL, 'Chris3', 'Maggs3');";
+//
 //$db->query($sql);
-//dumpr($db->execute());
-//dumpr($db->getError());
+//
+//if($db->execute() ){
+//    echo $db->rowCount() . ' records inserted';
+//} else {
+//    echo $db->getError();
+//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //-----------------------------------------------------------------
-echo "<hr><p>2. Run a query and return the results</p>";
+echo "<h3>Run a query and return the results</h3>";
 //$sql = "SELECT * FROM twitter";
 //$db->query($sql);
 //dumpr($db->fetchAll());
