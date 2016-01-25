@@ -4,7 +4,7 @@ A 'Work in progress' Database wrapper for PHP using MySQL and PDO
 
 ### Table of Contents
 **[Initialization](#initialization)**  
-**[Raw Query](#query)**  
+**[Raw Query](#raw-query)**  
 **[SQL Select](#sql-select)**  
 
 
