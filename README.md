@@ -63,7 +63,7 @@ if($db->execute() ){
 
 
 ### Raw Query, returning results
-To return the results from **->query** for use, use **->fetchAll()**.
+To return the results from **->query** for use, use **->fetchAll()** for multiple rows, and **->fetchOne** for a single row.
 
 ```php
 $sql = "SELECT * FROM `names`";
@@ -73,7 +73,7 @@ $db->query($sql);
 $results = $db->fetchAll();
 ```
 
-On success, **$results** will be an Object Array
+On success, **$results** will be an Object Array (fetchAll) or an Object (fetchOne)
 
 On failure, call **->getError** to display the SQL error message
 
