@@ -62,14 +62,28 @@ if($db->execute() ){
 
 
 
-### SQL Select
-asd fa sdf as df asdf a sdf asd ff 
-asd fa sdf as df asdf a sdf asd ff 
-asd fa sdf as df asdf a sdf asd ff 
-asd fa sdf as df asdf a sdf asd ff 
-asd fa sdf as df asdf a sdf asd ff 
+### Raw Query, returning results
+To return the results from **->query** for use, use **->fetchAll()**.
 
+```php
+$sql = "SELECT * FROM `names`";
 
+$db->query($sql);
+
+$results = $db->fetchAll();
+```
+
+On success, **$results** will be an Object Array
+
+On failure, call **->getError** to display the SQL error message
+
+```php
+if($results){
+    echo $db->rowCount() . ' rows returned';
+} else {
+    echo $db->getError();
+}
+```
 
 
 
