@@ -5,10 +5,8 @@
 include 'index.php';
 //-----------------------------------------------------------------
 
-echo "<h2>Query</h2>";
-
-//-----------------------------------------------------------------
-echo "<h3>Run a query, any query..</h3>";
+//  Query
+// ======
 
 //$sql = "CREATE TABLE `names` (
 //    `id`          int(5)      NOT NULL AUTO_INCREMENT,
@@ -16,6 +14,9 @@ echo "<h3>Run a query, any query..</h3>";
 //    `surname`     varchar(50) DEFAULT NULL,
 //    PRIMARY KEY (`id`)
 //);";
+
+// Run a query, any query..
+//-----------------------------------------------------------------
 
 $sql = "INSERT INTO `names` VALUES 
     (NULL, 'Chris',  'Maggs'),
@@ -30,8 +31,9 @@ if($db->execute() ){
     echo $db->getError();
 }
 
-//-----------------------------------------------------------------
-echo "<h3>Run a query and return the results</h3>";
+
+// Run a query and return the results
+//------------------------------------
 
 $sql = "SELECT * FROM `names`";
 
@@ -49,6 +51,13 @@ if($results){
 }
 
 
+// Run a query  using 'bound' params and return results
+//----------------------------------------------------
+
+$sql = "SELECT * FROM `names` WHERE firstname = :firstname";
+
+$db->query($sql);
+$db->bind(':firstname', 'Chris');
 
 
 
@@ -61,14 +70,7 @@ if($results){
 
 
 
-//-----------------------------------------------------------------
-echo "<hr><p>3. Run a query  using 'bind' params and return results</p>";
-//$sql = "SELECT * FROM twitter WHERE title = :title";
-//$db->query($sql);
-//$db->bind(':title', 'aaa');
-//dumpr($db->fetchAll());
-//dumpr($db->rowCount());
-//dumpr($db->getError());
+
 //-----------------------------------------------------------------
 echo "<h2>Select</h2>";
 //-----------------------------------------------------------------

@@ -26,7 +26,15 @@ $db = new MyPDO();
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
+$sql = "DROP TABLE `names`;";
+$db->query($sql);
+$db->execute();
 
-$sql = "TRUNCATE `names`;";
+$sql = "CREATE TABLE `names` (
+    `id`          int(5)      NOT NULL AUTO_INCREMENT,
+    `firstname`   varchar(50) DEFAULT NULL,
+    `surname`     varchar(50) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+);";
 $db->query($sql);
 $db->execute();
