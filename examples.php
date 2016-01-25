@@ -16,19 +16,19 @@ echo "<h3>Run a query, any query..</h3>";
 //    `surname`     varchar(50) DEFAULT NULL,
 //    PRIMARY KEY (`id`)
 //);";
-//
-//$sql = "INSERT INTO `names` VALUES 
-//    (NULL, 'Chris',  'Maggs'),
-//    (NULL, 'Chris2', 'Maggs2'),
-//    (NULL, 'Chris3', 'Maggs3');";
-//
-//$db->query($sql);
-//
-//if($db->execute() ){
-//    echo $db->rowCount() . ' records inserted';
-//} else {
-//    echo $db->getError();
-//}
+
+$sql = "INSERT INTO `names` VALUES 
+    (NULL, 'Chris',  'Maggs'),
+    (NULL, 'Chris2', 'Maggs2'),
+    (NULL, 'Chris3', 'Maggs3');";
+
+$db->query($sql);
+
+if($db->execute() ){
+    echo $db->rowCount() . ' records inserted';
+} else {
+    echo $db->getError();
+}
 
 //-----------------------------------------------------------------
 echo "<h3>Run a query and return the results</h3>";
@@ -37,8 +37,8 @@ $sql = "SELECT * FROM `names`";
 
 $db->query($sql);
 
-$results = $db->fetchAll(); // Multiple rows
-//$result  = $db->fetchOne();  // Single rows
+$results = $db->fetchAll();     // Multiple rows
+//$result  = $db->fetchOne();   // Single row
 //$results = $db->fetchAll('Array');  // Multiple rows, returned as a multi-dimensional array
 //$result  = $db->fetchOne('Array');  // Single row, returned as an array
 
