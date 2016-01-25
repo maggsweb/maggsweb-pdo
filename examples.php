@@ -3,10 +3,6 @@
 // Include db class file
 // Instantiate $db as a db connection
 include 'index.php';
-//-----------------------------------------------------------------
-
-//  Query
-// ======
 
 //$sql = "CREATE TABLE `names` (
 //    `id`          int(5)      NOT NULL AUTO_INCREMENT,
@@ -14,6 +10,9 @@ include 'index.php';
 //    `surname`     varchar(50) DEFAULT NULL,
 //    PRIMARY KEY (`id`)
 //);";
+
+//  Query
+// ======
 
 // Run a query, any query..
 //-----------------------------------------------------------------
@@ -58,6 +57,7 @@ $sql = "SELECT * FROM `names` WHERE firstname = :firstname";
 
 $db->query($sql);
 $db->bind(':firstname', 'Chris');
+
 
 
 
