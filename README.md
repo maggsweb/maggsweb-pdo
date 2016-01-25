@@ -44,6 +44,7 @@ $db->query($sql);
 ```
 
 On success, call **->rowCount** to return the number of rows updated (if applicable)
+
 On failure, call **->getError** to display the SQL error message
 
 ```php
