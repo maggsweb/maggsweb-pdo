@@ -25,7 +25,7 @@ require_once ('MyPDO.php');
 
 
 ### Raw Query
-To execute a raw string of SQL, pass the complete SQL string to *->query*, call *->execute* (returns true|false)
+To execute a raw string of SQL, pass the complete SQL string to **->query**, call **->execute** (returns true|false)
 
 ```php
 $sql = "CREATE TABLE `names` (
@@ -43,8 +43,8 @@ $sql = "INSERT INTO `names` VALUES
 $db->query($sql);
 ```
 
-On success, call *->rowCount* to return the number of rows updated (if applicable)
-On failure, call *->getError* to display the SQL error message
+On success, call **->rowCount** to return the number of rows updated (if applicable)
+On failure, call **->getError** to display the SQL error message
 
 ```php
 if($db->execute() ){
