@@ -62,8 +62,11 @@ $sql = "SELECT * FROM `names`";
 
 $db->query($sql);
 
-$results = $db->fetchAll();
-//$result = $db->fetchOne();
+$results = $db->fetchAll();     // Multiple rows
+//$result  = $db->fetchOne();   // Single row
+//$results = $db->fetchAll('Array');  // Multiple rows, returned as a multi-dimensional array
+//$result  = $db->fetchOne('Array');  // Single row, returned as an array
+
 ```
 
 On success, **$result** will be an Object Array (fetchAll) or an Object (fetchOne)
