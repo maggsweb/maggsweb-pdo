@@ -28,12 +28,12 @@ require_once ('MyPDO.php');
 To execute a raw string of SQL, pass the complete SQL string to **->query**, call **->execute** (returns true|false)
 
 ```php
-$sql = "CREATE TABLE `names` (
-    `id`          int(5)      NOT NULL AUTO_INCREMENT,
-    `firstname`   varchar(50) DEFAULT NULL,
-    `surname`     varchar(50) DEFAULT NULL,
-    PRIMARY KEY (`id`)
-);";
+//$sql = "CREATE TABLE `names` (
+//    `id`          int(5)      NOT NULL AUTO_INCREMENT,
+//    `firstname`   varchar(50) DEFAULT NULL,
+//    `surname`     varchar(50) DEFAULT NULL,
+//    PRIMARY KEY (`id`)
+//);";
 
 $sql = "INSERT INTO `names` VALUES 
     (NULL, 'Chris',  'Maggs'),
