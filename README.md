@@ -20,10 +20,6 @@ require_once ('MyPDO.php');
 
 
 
-
-
-
-
 ### Raw Query
 To execute a raw string of SQL, pass the complete SQL string to **->query**, call **->execute** (returns true|false)
 
@@ -58,10 +54,6 @@ if($db->execute() ){
 
 
 
-
-
-
-
 ### Raw Query, returning results
 To return the results from **->query** for use, call **->fetchAll()** for multiple rows, or **->fetchOne** for a single row.
 
@@ -86,9 +78,16 @@ if($results){
 ```
 
 
+### Raw Query, using 'bound' parameters
+To bind parameters to a query, pass the identifier and value to **->bind()**.  Repeat for each bound parameter in order.
 
+```php
+$sql = "SELECT * FROM `names` WHERE firstname = :firstname";
 
+$db->query($sql);
 
+$db->bind(':firstname', 'Chris');
+```
 
 
 
