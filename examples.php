@@ -30,34 +30,37 @@ echo "<h3>Run a query, any query..</h3>";
 //    echo $db->getError();
 //}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //-----------------------------------------------------------------
 echo "<h3>Run a query and return the results</h3>";
-//$sql = "SELECT * FROM twitter";
-//$db->query($sql);
-//dumpr($db->fetchAll());
-//dumpr($db->rowCount());
-//dumpr($db->getError());
+
+$sql = "SELECT * FROM `names`";
+
+$db->query($sql);
+
+$results = $db->fetchAll(); // Multiple rows
+//$result  = $db->fetchOne();  // Single rows
+//$results = $db->fetchAll('Array');  // Multiple rows, returned as a multi-dimensional array
+//$result  = $db->fetchOne('Array');  // Single row, returned as an array
+
+if($results){
+    echo $db->rowCount() . ' rows returned';
+} else {
+    echo $db->getError();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //-----------------------------------------------------------------
 echo "<hr><p>3. Run a query  using 'bind' params and return results</p>";
 //$sql = "SELECT * FROM twitter WHERE title = :title";

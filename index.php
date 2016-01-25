@@ -20,7 +20,7 @@ require_once 'MyPDO.php';
  * Instantiate DB class for use
  */
 $db = new MyPDO();
-//dumpr($db);
+
 
 //See examples.php for usage examples
 
