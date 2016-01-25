@@ -62,7 +62,8 @@ $sql = "SELECT * FROM `names`";
 
 $db->query($sql);
 
-$result = $db->fetchAll();
+$results = $db->fetchAll();
+//$result = $db->fetchOne();
 ```
 
 On success, **$result** will be an Object Array (fetchAll) or an Object (fetchOne)
@@ -78,6 +79,8 @@ if($results){
 ```
 
 
+
+
 ### Raw Query, using 'bound' parameters
 To bind parameters to a query, pass the identifier and value to **->bind()**.  Repeat for each bound parameter in order.
 
@@ -88,6 +91,8 @@ $db->query($sql);
 
 $db->bind(':firstname', 'Chris');
 ```
+
+Execute the query as above.
 
 
 
