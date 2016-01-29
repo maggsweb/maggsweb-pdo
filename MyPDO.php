@@ -120,45 +120,76 @@ class MyPDO {
     }
     
     
-    
-    public function select($table, $columns=' * ', $where=false, $limit=false)
+    /**
+     * Select Query
+     * 
+     * Build query string
+     * Build 'where' clauses from a String or an Array
+     * Bind 'where' params in sent via an Array
+     * Add additional SQL
+     * Execute Query
+     * Return multiple results
+     * 
+     * @param type $table
+     * @param type $columns
+     * @param type $where
+     * @param type $extra
+     * @return type
+     */
+    public function select($table, $columns=' * ', $where=false, $extra=false)
     {
         // Build QUERY
         $query = "SELECT $columns FROM $table ";
         
         // Build the WHERE
-        $query .= $this->buildWhereString($where);
+        if($where) $query .= $this->buildWhereString($where);
         
-        // order by
-        // direction
-        // limit
+        // order by | direction | limit
+        if($extra) $query .= " $extra ";
         
+        // Prepare query
         $this->stmt = $this->dbh->prepare($query);
         
         // Bind Where Params
-        $this->bindWhereParameters($where);
+        if($where) $this->bindWhereParameters($where);
         
         // Run!
         return $this->fetchAll();
     }
     
     
-    public function selectRow($table, $columns=' * ', $where=false)
+    /**
+     * Select Query
+     * 
+     * Build query string
+     * Build 'where' clauses from a String or an Array
+     * Bind 'where' params in sent via an Array
+     * Add additional SQL
+     * Execute query
+     * Return single result
+     * 
+     * @param type $table
+     * @param type $columns
+     * @param type $where
+     * @param type $extra
+     * @return type
+     */
+    public function selectRow($table, $columns=' * ', $where=false, $extra=false)
     {
         // Build QUERY
         $query = "SELECT $columns FROM $table ";
         
         // Build the WHERE
-        $query .= $this->buildWhereString($where);
+        if($where) $query .= $this->buildWhereString($where);
         
-        // order by
-        // direction
-        // limit
+        // order by | direction | limit
+        if($extra) $query .= " $extra ";
         
+        // Prepare query
         $this->stmt = $this->dbh->prepare($query);
         
         // Bind Where Params
-        $this->bindWhereParameters($where);
+        if($where) $this->bindWhereParameters($where);
         
         // Run!
         return $this->fetchRow();
@@ -166,38 +197,50 @@ class MyPDO {
 
     
     /**
+     * Insert Query
      * 
+     * Build 'column string' from $column Array
+     * Bind  'column values' from $column Array
+     * Build query string
+     * Bind column values
+     * Execute query
+     *  
      * @param type $table
      * @param type $columns
      * @return boolean
      */
-    public function insert($table, $columns=false)
+    public function insert($table, $columns)
     {
-        // Check $columns
-        if( !$columns || !is_array($columns)) {
-            $this->error = 'PDO Insert error: Parameter 2 must be an array';
-            return false;
-            }
             
         $columnString = $this->buildColumnString($columns);
         $binderString = $this->buildBindString($columns);
 
-            // Build QUERY
+        // Build QUERY
         $query = "INSERT INTO $table ($columnString) VALUES ($binderString);";
 
-            // Prepare Query
-            $this->stmt = $this->dbh->prepare($query);
-        
-            // Bind Column Params
-            foreach ($columns as $key => $value){
+        // Prepare Query
+        $this->stmt = $this->dbh->prepare($query);
+
+        // Bind Column Params
+        foreach ($columns as $key => $value){
             $this->bind(":column_$key", $value);
-            }
-            // Run!
-            return $this->execute();
-     
         }
+        
+        // Run!
+        return $this->execute();
+
+    }
     
     /**
+     * Update Query
+     * 
+     * Bind column values
+     * Build 'where' clause from String or Array
+     * Add aditional SQL
+     * Build query string
+     * Bind column values
+     * Bind 'where' parameters
+     * Execute query
      * 
      * @param type $table
      * @param type $columns
@@ -206,13 +249,8 @@ class MyPDO {
      * @param type $limit
      * @return boolean
      */
-    public function update($table, $columns=false, $where=false, $limit=false)
+    public function update($table, $columns, $where=false, $limit=false)
     {
-        // Check $columns
-        if( !$columns || !is_array($columns)) {
-            $this->error = 'PDO Update error: Parameter 2 must be an array';
-            return false;
-            }
             
         $query = "UPDATE $table SET ";
 
@@ -223,29 +261,36 @@ class MyPDO {
         $query .= $this->buildWhereString($where);
 
         // Build LIMIT
-            if($limit){
-                $limitInt = (int)$limit;
-                $query .= " LIMIT $limitInt";
-            }
+        if($limit){
+            $limitInt = (int)$limit;
+            $query .= " LIMIT $limitInt";
+        }
 
-            // Prepare Query
-            $this->stmt = $this->dbh->prepare($query);
+        // Prepare Query
+        $this->stmt = $this->dbh->prepare($query);
 
-            // Bind Column Params
-            foreach ($columns as $key => $value){
-                $this->bind(":column_$key", $value);
-            }
+        // Bind Column Params
+        foreach ($columns as $key => $value){
+            $this->bind(":column_$key", $value);
+        }
 
         // Bind Where Params
         $this->bindWhereParameters($where);
 
-            // Run!
-            return $this->execute();
+        // Run!
+        return $this->execute();
 
-        }
+    }
     
     
     /**
+     * Delete Query
+     * 
+     * Build 'where' clause from String or Array
+     * Add aditional SQL
+     * Build query string
+     * Bind 'where' parameters
+     * Execute query
      * 
      * @param type $table
      * @param type $where
@@ -310,7 +355,7 @@ class MyPDO {
     
 
     //  ----------------------------------------------------------------
-    //  PRIVATE FUNCTIONS  ---------------------------------------------
+    //  PRIVATE HELPER FUNCTIONS  --------------------------------------
     //  ----------------------------------------------------------------
     
     /**
