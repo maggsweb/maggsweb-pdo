@@ -91,7 +91,7 @@ $results = $db->selectAll($table,$columns);
 
 $table   = 'names';
 $columns = 'firstname';
-$where   = "surname LIKE '%D'";
+$where   = "surname LIKE 'D%'";
 
 $results = $db->selectAll($table,$columns,$where);
 
