@@ -13,8 +13,6 @@ define('DB_PASS', '');
  */
 require_once 'MyPDO.php';
 
-//include 'dumpr.php';
-//dumpr(time());
 
 /**
  * Instantiate DB class for use
@@ -38,3 +36,7 @@ $sql = "CREATE TABLE `names` (
 );";
 $db->query($sql);
 $db->execute();
+
+
+
+
