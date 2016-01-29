@@ -12,6 +12,7 @@ A 'Work in progress' Database wrapper for PHP using MySQL and PDO
 
 
 ### Initialization
+
 To use this class,  set your database connection constants, download and include 'MyPDO.php' into your project and instantiate a database connection.
 
 ```php
@@ -28,6 +29,9 @@ $db = new MyPDO();
 
 
 ### Raw Query
+
+# Run a query, any query..
+
 To execute a raw string of SQL, pass the complete SQL string to **->query**
 
 ```php
@@ -37,25 +41,15 @@ $sql = "INSERT INTO `names` VALUES
     (NULL, 'Chris3', 'Maggs3');";
 
 $db->query($sql);
+
+$result = $db->execute();
 ```
 Call **->execute** to execute the query.  This returns true|false;
 
-On success, call **->rowCount** to return the number of rows updated (if applicable)
-
-On failure, call **->getError** to display the SQL error message
-
-```php
-if($db->execute() ){
-    echo $db->rowCount() . ' records inserted';
-} else {
-    echo $db->getError();
-}
-```
 
 
+# Run a query and return the results
 
-
-### Raw Query, returning results
 To return the results from **->query** for use, call **->fetchAll()** for multiple rows or **->fetchOne** for a single row. Results are returned as an Array of Objects.  Optionally, pass 'Array' to the fetch functions to return results as an Array of Arrays.
 
 ```php
@@ -74,18 +68,9 @@ On success, **$result** will be an Object Array (fetchAll) or an Object (fetchOn
 
 On failure, call **->getError** to display the SQL error message
 
-```php
-if($results){
-    echo $db->rowCount() . ' rows returned';
-} else {
-    echo $db->getError();
-}
-```
 
+# Run a query  using 'bound' params and return results
 
-
-
-### Raw Query, using 'bound' parameters
 To bind parameters to a query, pass the column identifier and value to **->bind()**.  Repeat this for each bound parameter in order.
 
 ```php
@@ -94,13 +79,114 @@ $sql = "SELECT * FROM `names` WHERE firstname = :firstname";
 $db->query($sql);
 
 $db->bind(':firstname', 'Chris');
+
+$results = $db->fetchAll(); 
 ```
 
-Execute the query as above.
+## Query Results
+
+On success, call **->rowCount** to return the number of rows updated (if applicable)
+
+On failure, call **->getError** to display the SQL error message
+
+```php
+if($results){
+    echo $db->rowCount() . ' records affected';
+    foreach($results as $result){
+        echo $result->{$column};
+    }
+} else {
+    echo $db->getError();
+}
+```
+
 
 
 
 ###SQL Select
 
+# Select all columns and return multiple rows
+
+```php
+$table   = 'names';
+
+$results = $db->select($table);
+```
+
+# Select specific columns and return multiple rows
+
+```php
+$table   = 'names';
+$columns = 'firstname, surname';
+
+$results = $db->select($table,$columns);
+```
+
+# Select specific columns and return multiple rows using a 'where' string
+
+```php
+$table   = 'names';
+$columns = 'firstname';
+$where   = "surname LIKE '%D'";
+
+$results = $db->selectAll($table,$columns,$where);
+```
+
+# Select all columns and return multiple rows using a 'where' array
+
+```php
+$table   = 'names';
+$where   = array('surname' => 'Doe');
+
+$results = $db->selectAll($table,false,$where);
+```
+
+# Select one row using a 'where' string
+```php
+$table  = 'names';
+$where  = array('firstname' => 'John', 'surname' => 'Doe');
+
+$result = $db->selectRow($table,false,$where);
+```
+
+# Select one row using a 'where' array
+```php
+$table   = 'names';
+$columns = 'id';
+$where   = array('firstname' => 'John', 'surname' => 'Doe');
+
+$result  = $db->selectRow($table,$columns,$where);
+```
+
+# Select one value using a 'where' array
+
+```php
+$table   = 'names';
+$columns = 'id';
+$where   = array('firstname' => 'John', 'surname' => 'Doe');
+
+$result  = $db->selectOne($table,$columns,$where);
+```
+
+# Select multiple rows and order the results
+
+```php
+$table = 'names';
+$extra = 'ORDER BY surname ASC';
+
+$result = $db->selectAll($table,false,false,$extra);
+```
+
+## Select Results
+```php
+if($results){
+    echo $db->rowCount() . ' records affected';
+    foreach($results as $result){
+        echo $result->{$column};
+    }
+} else {
+    echo $db->getError();
+}
+```
 
 
