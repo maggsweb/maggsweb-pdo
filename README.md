@@ -12,6 +12,7 @@ A simple PHP database wrapper for MySQL using PDO
 **[Update Records](#update-records)**  
 **[Delete Records](#delete-records)**  
 
+<hr>
 
 ## Initialization
 
@@ -30,6 +31,7 @@ $db = new MyPDO();
 
 
 <hr>
+
 ## Raw Query
 
 #### Run a query, any query..
@@ -105,6 +107,7 @@ if($results||$result){
 
 
 <hr>
+
 ##SQL Select
 
 #### Select all columns and return multiple rows
@@ -192,6 +195,7 @@ if($results||$result){
 ```
 
 <hr>
+
 ##Insert Records
 
 #### Insert a record using 'bind' params
@@ -215,6 +219,7 @@ if($result){
 
 
 <hr>
+
 ## Update Records
 
 #### Update (all) records using 'bind' params
@@ -257,6 +262,7 @@ if($result){
 
 
 <hr>
+
 ## Delete Records
 
 
