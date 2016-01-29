@@ -1,5 +1,7 @@
 # MyPDO
-A 'Work in progress' Database wrapper for PHP using MySQL and PDO
+
+A simple PHP database wrapper for MySQL using PDO
+
 <hr>
 
 ### Table of Contents
