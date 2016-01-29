@@ -55,11 +55,11 @@ $results = $db->fetchAll();
 // QUERY RESULTS
 //-----------------------------------------------------
 // All results can be tested and outputted using $result
-if($results){
+if($results||$result){
     echo $db->rowCount() . ' records affected';
-    foreach($results as $result){
-        echo $result->{$column};
-    }
+    //foreach($results as $result){
+    //    echo $result->{$column};
+    //}
 } else {
     echo $db->getError();
 }
@@ -146,11 +146,11 @@ $result = $db->selectAll($table,false,false,$extra);
 // SELECT RESULTS
 // ---------------
 // All results can be tested and outputted using $result
-if($results){
+if($results||$result){
     echo $db->rowCount() . ' records affected';
-    foreach($results as $result){
-        echo $result->{$column};
-    }
+    //foreach($results as $result){
+    //    echo $result->{$column};
+    //}
 } else {
     echo $db->getError();
 }
@@ -166,12 +166,12 @@ if($results){
 $table   = 'names';
 $columns = array('firstname' => 'Fred', 'surname' => 'Bloggs');
 
-$insert = $db->insert($table,$columns);
+$result = $db->insert($table,$columns);
 
 // INSERT STATUS
 // -------------
 // Success can be tested using $insert
-if($insert){
+if($result){
     echo $db->rowCount() . ' records affected';
 } else {
     echo $db->getError();
@@ -187,7 +187,7 @@ if($insert){
 $table   = 'names';
 $columns = array('firstname' => 'Fred', 'surname' => 'Bloggs');
 
-$update = $db->update($table,$columns);
+$result = $db->update($table,$columns);
 
 
 // Update records using 'bind' params and 'where' string
@@ -197,7 +197,7 @@ $table   = 'names';
 $columns = array('firstname' => 'Fred 2', 'surname' => 'Bloggs 2');
 $where   = "firstname = 'Fred' AND surname = 'Bloggs'";  //'WHERE' is not needed, or spaces
 
-$update = $db->update($table,$columns,$where);
+$result = $db->update($table,$columns,$where);
 
 
 // Update specific records using 'bind' params and 'where' 
@@ -207,13 +207,13 @@ $table   = 'names';
 $columns = array('firstname' => 'Fred 2', 'surname' => 'Bloggs 2');
 $where   = array('firstname' => 'Fred',   'surname' => 'Bloggs');
 
-$update = $db->update($table,$columns,$where);
+$result = $db->update($table,$columns,$where);
 
 
 // UPDATE STATUS
 // -------------
 // Success can be tested using $update
-if($update){
+if($result){
     echo $db->rowCount() . ' records affected';
 } else {
     echo $db->getError();
@@ -230,7 +230,7 @@ if($update){
 $table  = 'names';
 $where  = "surname = 'Doe'";
 
-$delete = $db->delete($table,$where);
+$result = $db->delete($table,$where);
 
 
 // Delete records using a 'where' array
@@ -239,13 +239,13 @@ $delete = $db->delete($table,$where);
 $table = 'names';
 $where = array('surname'] = 'Doe');
 
-$delete = $db->delete($table,$where);
+$result = $db->delete($table,$where);
 
 
 // DELETE STATUS
 // -------------
 // Success can be tested using $delete
-if($delete){
+if($result){
     echo $db->rowCount() . ' records affected';
 } else {
     echo $db->getError();
