@@ -2,7 +2,7 @@
 
 // Include db class file
 // Instantiate $db as a db connection
-include 'index.php';
+// include 'index.php';
 
 //$sql = "CREATE TABLE `names` (
 //    `id`          int(5)      NOT NULL AUTO_INCREMENT,
@@ -11,24 +11,21 @@ include 'index.php';
 //    PRIMARY KEY (`id`)
 //);";
 
-//  Query
-// ======
+
+// Query
+// ===========================================================
 
 // Run a query, any query..
-//-----------------------------------------------------------------
+//-------------------------
 
 $sql = "INSERT INTO `names` VALUES 
-    (NULL, 'Chris',  'Maggs'),
-    (NULL, 'Chris2', 'Maggs2'),
-    (NULL, 'Chris3', 'Maggs3');";
+    (NULL, 'Joe',  'Bloggs'),
+    (NULL, 'John', 'Doe'),
+    (NULL, 'Jane', 'Doe');";
 
 $db->query($sql);
 
-if($db->execute() ){
-    echo $db->rowCount() . ' records inserted';
-} else {
-    echo $db->getError();
-}
+$results = $db->execute();
 
 
 // Run a query and return the results
@@ -43,27 +40,216 @@ $results = $db->fetchAll();     // Multiple rows
 //$results = $db->fetchAll('Array');  // Multiple rows, returned as a multi-dimensional array
 //$result  = $db->fetchOne('Array');  // Single row, returned as an array
 
+
+// Run a query  using 'bound' params and return results
+//-----------------------------------------------------
+
+$sql = "SELECT * FROM `names` WHERE firstname = :firstname";
+
+$db->query($sql);
+$db->bind(':firstname', 'John');
+
+$results = $db->fetchAll(); 
+
+
+// QUERY RESULTS
+//-----------------------------------------------------
+// All results can be tested and outputted using $result
 if($results){
-    echo $db->rowCount() . ' rows returned';
+    echo $db->rowCount() . ' records affected';
+    foreach($results as $result){
+        echo $result->{$column};
+    }
 } else {
     echo $db->getError();
 }
 
 
-// Run a query  using 'bound' params and return results
-//----------------------------------------------------
 
-$sql = "SELECT * FROM `names` WHERE firstname = :firstname";
+// SELECT
+// =================================================================
 
-$db->query($sql);
-$db->bind(':firstname', 'Chris');
+// Select all columns and return multiple rows
+//--------------------------------------------
 
+$table   = 'names';
 
-
-
-
+$results = $db->select($table);
 
 
+// Select specific columns and return multiple rows
+//-------------------------------------------------
+
+$table   = 'names';
+$columns = 'firstname, surname';
+
+$results = $db->select($table,$columns);
+
+
+// Select specific columns and return multiple rows using a 'where' string
+//------------------------------------------------------------------------
+
+$table   = 'names';
+$columns = 'firstname';
+$where   = "surname LIKE '%D'";
+
+$results = $db->selectAll($table,$columns,$where);
+
+
+// Select all columns and return multiple rows using a 'where' array
+//------------------------------------------------------------------
+
+$table   = 'names';
+$where   = array('surname' => 'Doe');
+
+$results = $db->selectAll($table,false,$where);
+
+
+// Select one row using a 'where' string
+//--------------------------------------
+
+$table  = 'names';
+$where  = array('firstname' => 'John', 'surname' => 'Doe');
+
+$result = $db->selectRow($table,false,$where);
+
+
+// Select one row using a 'where' array
+//-------------------------------------
+
+$table   = 'names';
+$columns = 'id';
+$where   = array('firstname' => 'John', 'surname' => 'Doe');
+
+$result  = $db->selectRow($table,$columns,$where);
+
+
+// Select one value using a 'where' array
+//-------------------------------------
+
+$table   = 'names';
+$columns = 'id';
+$where   = array('firstname' => 'John', 'surname' => 'Doe');
+
+$result  = $db->selectOne($table,$columns,$where);
+
+
+// Select multiple rows and order the results
+//-------------------------------------------
+
+$table = 'names';
+$extra = 'ORDER BY surname ASC';
+
+$result = $db->selectAll($table,false,false,$extra);
+
+
+// SELECT RESULTS
+// ---------------
+// All results can be tested and outputted using $result
+if($results){
+    echo $db->rowCount() . ' records affected';
+    foreach($results as $result){
+        echo $result->{$column};
+    }
+} else {
+    echo $db->getError();
+}
+
+
+
+// INSERT RECORDS
+// ==============================================
+
+// Insert a record using 'bind' params
+//------------------------------------
+
+$table   = 'names';
+$columns = array('firstname' => 'Fred', 'surname' => 'Bloggs');
+
+$insert = $db->insert($table,$columns);
+
+// INSERT STATUS
+// -------------
+// Success can be tested using $insert
+if($insert){
+    echo $db->rowCount() . ' records affected';
+} else {
+    echo $db->getError();
+}
+
+
+// UPDATE RECORDS
+// ==============================================
+
+// Update (all) records using 'bind' params 
+// ----------------------------------------
+
+$table   = 'names';
+$columns = array('firstname' => 'Fred', 'surname' => 'Bloggs');
+
+$update = $db->update($table,$columns);
+
+
+// Update records using 'bind' params and 'where' string
+// ------------------------------------------------------
+
+$table   = 'names';
+$columns = array('firstname' => 'Fred 2', 'surname' => 'Bloggs 2');
+$where   = "firstname = 'Fred' AND surname = 'Bloggs'";  //'WHERE' is not needed, or spaces
+
+$update = $db->update($table,$columns,$where);
+
+
+// Update specific records using 'bind' params and 'where' array
+//--------------------------------------------------------------
+
+$table   = 'names';
+$columns = array('firstname' => 'Fred 2', 'surname' => 'Bloggs 2');
+$where   = array('firstname' => 'Fred',   'surname' => 'Bloggs');
+
+$update = $db->update($table,$columns,$where);
+
+
+// UPDATE STATUS
+// -------------
+// Success can be tested using $update
+if($update){
+    echo $db->rowCount() . ' records affected';
+} else {
+    echo $db->getError();
+}
+
+
+
+// DELETE RECORDS
+// ==============================================
+
+// Delete records using a 'where' string
+//--------------------------------------
+
+$table  = 'names';
+$where  = "surname = 'Doe'";
+
+$delete = $db->delete($table,$where);
+
+
+// Delete records using a 'where' array
+//-------------------------------------
+
+$table = 'names';
+$where = array('surname'] = 'Doe');
+
+$delete = $db->delete($table,$where);
+
+
+// DELETE STATUS
+// -------------
+// Success can be tested using $delete
+if($delete){
+    echo $db->rowCount() . ' records affected';
+} else {
+    echo $db->getError();
+}
 
 
 
@@ -71,164 +257,9 @@ $db->bind(':firstname', 'Chris');
 
 
 
-//-----------------------------------------------------------------
-echo "<h2>Select</h2>";
-//-----------------------------------------------------------------
-echo "<hr><p>4. Select all columns | named columns and return multiple rows using 'select'</p>";
-//$table = 'twitter';
-//$columns = 'title, link';
-//$results = $db->select($table,$columns);
-//dumpr($results);
-//dumpr($db->rowCount());
-//dumpr($db->getError());
-//-----------------------------------------------------------------
-echo "<hr><p>5. Select multiple rows using 'select' and optional 'where' string|array</p>";
-//$table = 'twitter';
-//$columns = '*';
-//#$where = false;
-//#$where = "link='eee'";
-//$where = array();
-//$where['title'] = 'aaa';
-//$where['link']  = 'ccc';
-//dumpr($db->select($table,$columns,$where));
-//dumpr($db->getQuery());
-//dumpr($db->rowCount());
-//dumpr($db->getError());
-//-----------------------------------------------------------------
-echo "<hr><p>6. Select one row using 'selectRow' and optional 'where' string|array</p>";
-//$table = 'twitter';
-//$columns = '*';
-//#$where = false;
-//#$where = "link='eee'";
-//$where = array();
-//$where['link']  = 'eee';
-//dumpr($db->selectRow($table,$columns,$where));
-//dumpr($db->getQuery());
-//dumpr($db->getError());
-//-----------------------------------------------------------------
-echo "<hr><p>7. Select multiple rows using 'selectRow' and order the results</p>";
-//$table = 'twitter';
-//$columns = '*';
-//#$where = false;
-//#$where = "link='eee'";
-//$where = array();
-//$where['link']  = 'ddd';
-//dumpr($db->selectRow($table,$columns,$where));
-//dumpr($db->getQuery());
-//dumpr($db->getError());
 
 
 
 
-
-
-
-// TODO    add order by and direction to all selects
-
-
-
-
-
-//-----------------------------------------------------------------
-echo "<h2>Insert</h2>";
-//-----------------------------------------------------------------
-echo "<hr><p>5. Insert a record using SQL & 'query'</p>";
-//$sql = "INSERT INTO twitter (title,link,description) VALUES ('A title', 'A link', 'A Description')";
-//$db->query($sql);
-//dumpr($db->execute());
-//dumpr($db->getError());
-//-----------------------------------------------------------------
-echo "<hr><p>6. Insert a record using 'bind' params and 'query'</p>";
-//$sql = "INSERT INTO twitter (title,link,description) VALUES (:title, :link, :description)";
-//$db->query($sql);
-//$db->bind(':title', 'ttiittllee');
-//$db->bind(':link', 'lliinnkk');
-//$db->bind(':description', 'descriptiondescriptiondescription');
-//dumpr($db->execute());
-//dumpr($db->getError());
-//-----------------------------------------------------------------
-echo "<hr><p>7. Insert a record using 'bind' params and 'insert'</p>";
-//$table = 'twitter';
-//$columns = array();
-//$columns['title']       = 'Title (2)';
-//$columns['link']        = 'Link (2)';
-//$columns['xxx']        = 'xxx'; // test for error with incorrect column
-//$columns['description'] = 'Desc (2)';
-//$columns['pubDate']     = date('Y-m-d h:i:s');
-//$insert = $db->insert($table,$columns);
-//$insert = $db->insert($table); // test for error with missing $columns
-//dumpr($insert);
-//dumpr($db->getError());
-//-----------------------------------------------------------------
-
-echo "<h2>Update</h2>";
-//-----------------------------------------------------------------
-echo "<hr><p>8. pdate a record using 'bind' params and 'query', and show number of records updated</p>";
-//$sql = "UPDATE twitter SET title = :title";
-//$db->query($sql);
-//$db->bind(':title', 'Chris3');
-//dumpr($db->execute());
-//dumpr($db->getQuery());
-//dumpr($db->getError());
-//dumpr($db->rowCount());
-//-----------------------------------------------------------------
-echo "<hr><p>9. Update all record using 'bind' params and 'update', and show number of records updated.</p>";
-//$table = 'twitter';
-////$table = 'twitterX'; // test incorrect table name
-//$columns = array();
-//$columns['title'] = 'Title (20013)';
-//$columns['link']  = 'Link  (2001)';
-//dumpr($db->update($table,$columns));
-//dumpr($db->getQuery());
-//dumpr($db->getError());
-//dumpr($db->rowCount());
-//-----------------------------------------------------------------
-echo "<hr><p>10. Update specific records using a 'where' string and 'update', and show number of records updated.</p>";
-//$table = 'twitter';
-////$table = 'twitterX'; // test incorrect table name
-//$columns = array();
-//$columns['title'] = 'UPDATED';
-//$columns['link']  = 'CHANGED';
-//$where = "title = 'update' AND link = 'change'";  //'WHERE' is not needed, or spaces
-//dumpr($db->update($table,$columns,$where));
-//dumpr($db->getQuery());
-//dumpr($db->getQuery());
-//dumpr($db->getError());
-//dumpr($db->rowCount());
-//-----------------------------------------------------------------
-echo "<hr><p>11. Update specific records using a 'where' array and 'update', and show number of records updated.</p>";
-//$table = 'twitter';
-//$columns = array();
-//$columns['title'] = 'UPDATED WHERE';
-//$columns['link']  = 'CHANGED WHERE';
-//$where = array();
-//$where['title'] = 'update';
-//$where['link']  = 'change';
-//dumpr($db->update($table,$columns,$where));
-//dumpr($db->getQuery());
-//dumpr($db->getError());
-//dumpr($db->rowCount());
-//-----------------------------------------------------------------
-echo "<h2>Delete</h2>";
-//-----------------------------------------------------------------
-echo "<hr><p>12. Delete records using a 'where' string, and show number of records deleted.</p>";
-//$table = 'twitter';
-//$where = "pubDate = '0000-00-00 00:00:00'";
-//dumpr($db->delete($table,$where));
-//dumpr($db->getQuery());
-//dumpr($db->getError());
-//dumpr($db->rowCount());
-//-----------------------------------------------------------------
-echo "<hr><p>13. Delete records using a 'where' array, and show number of records deleted.</p>";
-//$table = 'twitter';
-//$where = array();
-//$where['title'] = 'update';
-//$where['link']  = 'delete';
-//dumpr($db->delete($table,$where));
-//dumpr($db->getQuery());
-//dumpr($db->getQuery());
-//dumpr($db->getError());
-//dumpr($db->rowCount());
-//-----------------------------------------------------------------
 
 
