@@ -6,9 +6,9 @@ A 'Work in progress' Database wrapper for PHP using MySQL and PDO
 **[Initialization](#initialization)**  
 **[Raw Query](#raw-query)**  
 **[SQL Select](#sql-select)**  
-**[Insert Records](#sql-insert)**
-**[Update Records](#sql-update)**
-**[Delete Records](#sql-delete)**
+**[Insert Records](#sql-insert)**  
+**[Update Records](#sql-update)**  
+**[Delete Records](#sql-delete)**  
 
 
 ## Initialization
