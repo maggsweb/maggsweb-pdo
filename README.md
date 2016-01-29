@@ -15,7 +15,6 @@ A 'Work in progress' Database wrapper for PHP using MySQL and PDO
 To use this class,  set your database connection constants, download and include 'MyPDO.php' into your project and instantiate a database connection.
 
 ```php
-
 define('DB_HOST', '');  //eg: 127.0.0.1
 define('DB_USER', '');  //eg: root
 define('DB_NAME', '');  //eg: admin
@@ -24,7 +23,6 @@ define('DB_PASS', '');  //eg: password
 require_once ('MyPDO.php');
 
 $db = new MyPDO();
-
 ```
 
 
@@ -33,7 +31,6 @@ $db = new MyPDO();
 To execute a raw string of SQL, pass the complete SQL string to **->query**, call **->execute** (returns true|false)
 
 ```php
-
 $sql = "INSERT INTO `names` VALUES 
     (NULL, 'Chris',  'Maggs'),
     (NULL, 'Chris2', 'Maggs2'),
@@ -69,7 +66,6 @@ $results = $db->fetchAll();     // Multiple rows
 //$result  = $db->fetchOne();   // Single row
 //$results = $db->fetchAll('Array');  // Multiple rows, returned as a multi-dimensional array
 //$result  = $db->fetchOne('Array');  // Single row, returned as an array
-
 ```
 
 On success, **$result** will be an Object Array (fetchAll) or an Object (fetchOne)
