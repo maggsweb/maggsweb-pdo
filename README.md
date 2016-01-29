@@ -279,7 +279,7 @@ $result = $db->delete($table,$where);
 
 ```php
 $table = 'names';
-$where = array('surname'] = 'Doe');
+$where = array('surname' => 'Doe');
 
 $result = $db->delete($table,$where);
 ```
