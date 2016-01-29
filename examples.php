@@ -200,7 +200,7 @@ $where   = "firstname = 'Fred' AND surname = 'Bloggs'";  //'WHERE' is not needed
 $update = $db->update($table,$columns,$where);
 
 
-// Update specific records using 'bind' params and 'where' array
+// Update specific records using 'bind' params and 'where' 
 //--------------------------------------------------------------
 
 $table   = 'names';
