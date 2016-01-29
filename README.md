@@ -12,10 +12,19 @@ A 'Work in progress' Database wrapper for PHP using MySQL and PDO
 
 
 ### Initialization
-To use this class, download and include 'MyPDO.php' into your project.
+To use this class,  set your database connection constants, download and include 'MyPDO.php' into your project and instantiate a database connection.
 
 ```php
+
+define('DB_HOST', '127.0.0.1');
+define('DB_USER', 'root');
+define('DB_NAME', 'pdotest');
+define('DB_PASS', '');
+
 require_once ('MyPDO.php');
+
+$db = new MyPDO();
+
 ```
 
 
