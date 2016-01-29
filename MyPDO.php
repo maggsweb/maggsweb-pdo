@@ -121,14 +121,11 @@ class MyPDO {
     
     
     /**
-     * Select Query
+     * Select Multiple Rows
      * 
-     * Build query string
-     * Build 'where' clauses from a String or an Array
-     * Bind 'where' params in sent via an Array
-     * Add additional SQL
-     * Execute Query
-     * Return multiple results
+     * Build 'select' statement
+     * Bind 'where' params (if sent via an Array)
+     * Execute Query and return multiple rows
      * 
      * @param type $table
      * @param type $columns
@@ -136,37 +133,24 @@ class MyPDO {
      * @param type $extra
      * @return type
      */
-    public function select($table, $columns=' * ', $where=false, $extra=false)
+    public function selectAll($table, $columns=false, $where=false, $extra=false)
     {
-        // Build QUERY
-        $query = "SELECT $columns FROM $table ";
-        
-        // Build the WHERE
-        if($where) $query .= $this->buildWhereString($where);
-        
-        // order by | direction | limit
-        if($extra) $query .= " $extra ";
-        
         // Prepare query
-        $this->stmt = $this->dbh->prepare($query);
+        $this->buildSelectStatement($table, $columns, $where, $extra);
         
         // Bind Where Params
         if($where) $this->bindWhereParameters($where);
         
-        // Run!
         return $this->fetchAll();
     }
     
     
     /**
-     * Select Query
+     * Select Single Row
      * 
-     * Build query string
-     * Build 'where' clauses from a String or an Array
-     * Bind 'where' params in sent via an Array
-     * Add additional SQL
-     * Execute query
-     * Return single result
+     * Build 'select' statement
+     * Bind 'where' params (if sent via an Array)
+     * Execute Query and return single row
      * 
      * @param type $table
      * @param type $columns
@@ -174,27 +158,53 @@ class MyPDO {
      * @param type $extra
      * @return type
      */
-    public function selectRow($table, $columns=' * ', $where=false, $extra=false)
+    public function selectRow($table, $columns=false, $where=false, $extra=false)
     {
-        // Build QUERY
-        $query = "SELECT $columns FROM $table ";
-        
-        // Build the WHERE
-        if($where) $query .= $this->buildWhereString($where);
-        
-        // order by | direction | limit
-        if($extra) $query .= " $extra ";
-        
         // Prepare query
-        $this->stmt = $this->dbh->prepare($query);
+        $this->buildSelectStatement($table, $columns, $where, $extra);
         
         // Bind Where Params
         if($where) $this->bindWhereParameters($where);
         
-        // Run!
         return $this->fetchRow();
     }
 
+    
+    /**
+     * 
+     * Select Single value
+     * 
+     * Check that $column has a single value (column name)
+     * Build 'select' statement
+     * Bind 'where' params (if sent via an Array)
+     * Execute Query and return single row
+     * Return the required column value
+     * 
+     * @param type $table
+     * @param type $column
+     * @param type $where
+     * @param type $extra
+     * @return type
+     */
+    public function selectOne($table, $column=false, $where=false, $extra=false)
+    {
+        // Check only 1 column name
+        if(!is_array($column) || count($column) != 1){
+            $this->error = 'Error `selectOne` can only pass a single column name';
+        }
+        
+        // Prepare query
+        $this->buildSelectStatement($table, $column, $where, $extra);
+        
+        // Bind Where Params
+        if($where) $this->bindWhereParameters($where);
+        
+        $returnObject = $this->fetchRow();
+        
+        return $returnObject->$column;
+        
+    }
+    
     
     /**
      * Insert Query
@@ -226,9 +236,7 @@ class MyPDO {
             $this->bind(":column_$key", $value);
         }
         
-        // Run!
         return $this->execute();
-
     }
     
     /**
@@ -277,9 +285,7 @@ class MyPDO {
         // Bind Where Params
         $this->bindWhereParameters($where);
 
-        // Run!
         return $this->execute();
-
     }
     
     
@@ -317,13 +323,8 @@ class MyPDO {
         // Bind Where Params
         $this->bindWhereParameters($where);
         
-        // Run!
         return $this->execute();
     }
-    
-    
-    
-    
     
     
     // Num-affected-rows for INSERT/UPDATE/DELETE
@@ -357,6 +358,29 @@ class MyPDO {
     //  ----------------------------------------------------------------
     //  PRIVATE HELPER FUNCTIONS  --------------------------------------
     //  ----------------------------------------------------------------
+    
+    
+    /**
+     * 
+     * @param type $table
+     * @param string $columns
+     * @param type $where
+     * @param type $extra
+     */
+    private function buildSelectStatement($table, $columns, $where, $extra)
+    {
+        // Generate default column
+        if(!$columns) $columns = ' * ';
+        // Build QUERY
+        $query = "SELECT $columns FROM $table ";
+        // Build the WHERE
+        if($where) $query .= $this->buildWhereString($where);
+        // order by | direction | limit
+        if($extra) $query .= " $extra ";
+        // Prepare query
+        $this->stmt = $this->dbh->prepare($query);
+    }
+
     
     /**
      * 
