@@ -6,12 +6,13 @@ A 'Work in progress' Database wrapper for PHP using MySQL and PDO
 **[Initialization](#initialization)**  
 **[Raw Query](#raw-query)**  
 **[SQL Select](#sql-select)**  
+**[INSERT Query](#sql-insert)**
 
 
 
 
 
-### Initialization
+## Initialization
 
 To use this class,  set your database connection constants, download and include 'MyPDO.php' into your project and instantiate a database connection.
 
@@ -27,10 +28,10 @@ $db = new MyPDO();
 ```
 
 
+<hr>
+## Raw Query
 
-### Raw Query
-
-# Run a query, any query..
+#### Run a query, any query..
 
 To execute a raw string of SQL, pass the complete SQL string to **->query**
 
@@ -48,7 +49,7 @@ Call **->execute** to execute the query.  This returns true|false;
 
 
 
-# Run a query and return the results
+#### Run a query and return the results
 
 To return the results from **->query** for use, call **->fetchAll()** for multiple rows or **->fetchOne** for a single row. Results are returned as an Array of Objects.  Optionally, pass 'Array' to the fetch functions to return results as an Array of Arrays.
 
@@ -69,7 +70,7 @@ On success, **$result** will be an Object Array (fetchAll) or an Object (fetchOn
 On failure, call **->getError** to display the SQL error message
 
 
-# Run a query  using 'bound' params and return results
+#### Run a query  using 'bound' params and return results
 
 To bind parameters to a query, pass the column identifier and value to **->bind()**.  Repeat this for each bound parameter in order.
 
@@ -83,7 +84,7 @@ $db->bind(':firstname', 'Chris');
 $results = $db->fetchAll(); 
 ```
 
-## Query Results
+### Query Results
 
 On success, call **->rowCount** to return the number of rows updated (if applicable)
 
@@ -102,10 +103,10 @@ if($results){
 
 
 
+<hr>
+##SQL Select
 
-###SQL Select
-
-# Select all columns and return multiple rows
+#### Select all columns and return multiple rows
 
 ```php
 $table   = 'names';
@@ -113,7 +114,7 @@ $table   = 'names';
 $results = $db->select($table);
 ```
 
-# Select specific columns and return multiple rows
+#### Select specific columns and return multiple rows
 
 ```php
 $table   = 'names';
@@ -122,7 +123,7 @@ $columns = 'firstname, surname';
 $results = $db->select($table,$columns);
 ```
 
-# Select specific columns and return multiple rows using a 'where' string
+#### Select specific columns and return multiple rows using a 'where' string
 
 ```php
 $table   = 'names';
@@ -132,7 +133,7 @@ $where   = "surname LIKE '%D'";
 $results = $db->selectAll($table,$columns,$where);
 ```
 
-# Select all columns and return multiple rows using a 'where' array
+#### Select all columns and return multiple rows using a 'where' array
 
 ```php
 $table   = 'names';
@@ -141,7 +142,7 @@ $where   = array('surname' => 'Doe');
 $results = $db->selectAll($table,false,$where);
 ```
 
-# Select one row using a 'where' string
+#### Select one row using a 'where' string
 ```php
 $table  = 'names';
 $where  = array('firstname' => 'John', 'surname' => 'Doe');
@@ -149,7 +150,7 @@ $where  = array('firstname' => 'John', 'surname' => 'Doe');
 $result = $db->selectRow($table,false,$where);
 ```
 
-# Select one row using a 'where' array
+#### Select one row using a 'where' array
 ```php
 $table   = 'names';
 $columns = 'id';
@@ -158,7 +159,7 @@ $where   = array('firstname' => 'John', 'surname' => 'Doe');
 $result  = $db->selectRow($table,$columns,$where);
 ```
 
-# Select one value using a 'where' array
+#### Select one value using a 'where' array
 
 ```php
 $table   = 'names';
@@ -168,7 +169,7 @@ $where   = array('firstname' => 'John', 'surname' => 'Doe');
 $result  = $db->selectOne($table,$columns,$where);
 ```
 
-# Select multiple rows and order the results
+#### Select multiple rows and order the results
 
 ```php
 $table = 'names';
@@ -177,7 +178,7 @@ $extra = 'ORDER BY surname ASC';
 $result = $db->selectAll($table,false,false,$extra);
 ```
 
-## Select Results
+### Select Results
 ```php
 if($results){
     echo $db->rowCount() . ' records affected';
@@ -190,3 +191,6 @@ if($results){
 ```
 
 
+# INSERT Records
+
+#### dsadfasdfasdfdf
