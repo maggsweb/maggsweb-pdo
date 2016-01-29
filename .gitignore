@@ -2,6 +2,10 @@
 ## Eclipse
 #################
 
+
+#@CM
+.zip
+
 *.pydevproject
 .project
 .metadata
