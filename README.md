@@ -16,10 +16,10 @@ To use this class,  set your database connection constants, download and include
 
 ```php
 
-define('DB_HOST', '127.0.0.1');
-define('DB_USER', 'root');
-define('DB_NAME', 'pdotest');
-define('DB_PASS', '');
+define('DB_HOST', '');  //eg: 127.0.0.1
+define('DB_USER', '');  //eg: root
+define('DB_NAME', '');  //eg: admin
+define('DB_PASS', '');  //eg: password
 
 require_once ('MyPDO.php');
 
@@ -102,7 +102,7 @@ Execute the query as above.
 
 
 
-
+###SQL Select
 
 
 
