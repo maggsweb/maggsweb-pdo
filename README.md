@@ -115,7 +115,7 @@ if($results||$result){
 ```php
 $table   = 'names';
 
-$results = $db->select($table);
+$results = $db->selectAll($table);
 ```
 
 #### Select specific columns and return multiple rows
@@ -124,7 +124,7 @@ $results = $db->select($table);
 $table   = 'names';
 $columns = 'firstname, surname';
 
-$results = $db->select($table,$columns);
+$results = $db->selectAll($table,$columns);
 ```
 
 #### Select specific columns and return multiple rows using a 'where' string
