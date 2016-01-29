@@ -28,7 +28,7 @@ $db = new MyPDO();
 
 
 ### Raw Query
-To execute a raw string of SQL, pass the complete SQL string to **->query**, call **->execute** (returns true|false)
+To execute a raw string of SQL, pass the complete SQL string to **->query**
 
 ```php
 $sql = "INSERT INTO `names` VALUES 
@@ -38,6 +38,7 @@ $sql = "INSERT INTO `names` VALUES
 
 $db->query($sql);
 ```
+Call **->execute** to execute the query.  This returns true|false;
 
 On success, call **->rowCount** to return the number of rows updated (if applicable)
 
@@ -55,7 +56,7 @@ if($db->execute() ){
 
 
 ### Raw Query, returning results
-To return the results from **->query** for use, call **->fetchAll()** for multiple rows, or **->fetchOne** for a single row.
+To return the results from **->query** for use, call **->fetchAll()** for multiple rows or **->fetchOne** for a single row. Results are returned as an Array of Objects.  Optionally, pass 'Array' to the fetch functions to return results as an Array of Arrays.
 
 ```php
 $sql = "SELECT * FROM `names`";
@@ -64,6 +65,7 @@ $db->query($sql);
 
 $results = $db->fetchAll();     // Multiple rows
 //$result  = $db->fetchOne();   // Single row
+
 //$results = $db->fetchAll('Array');  // Multiple rows, returned as a multi-dimensional array
 //$result  = $db->fetchOne('Array');  // Single row, returned as an array
 ```
@@ -84,7 +86,7 @@ if($results){
 
 
 ### Raw Query, using 'bound' parameters
-To bind parameters to a query, pass the identifier and value to **->bind()**.  Repeat for each bound parameter in order.
+To bind parameters to a query, pass the column identifier and value to **->bind()**.  Repeat this for each bound parameter in order.
 
 ```php
 $sql = "SELECT * FROM `names` WHERE firstname = :firstname";
