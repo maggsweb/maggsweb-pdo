@@ -6,10 +6,9 @@ A 'Work in progress' Database wrapper for PHP using MySQL and PDO
 **[Initialization](#initialization)**  
 **[Raw Query](#raw-query)**  
 **[SQL Select](#sql-select)**  
-**[INSERT Query](#sql-insert)**
-
-
-
+**[Insert Records](#sql-insert)**
+**[Update Records](#sql-update)**
+**[Delete Records](#sql-delete)**
 
 
 ## Initialization
@@ -190,7 +189,118 @@ if($results){
 }
 ```
 
+<hr>
+##Insert Records
 
-# INSERT Records
+#### Insert a record using 'bind' params
 
-#### dsadfasdfasdfdf
+```php
+$table   = 'names';
+$columns = array('firstname' => 'Fred', 'surname' => 'Bloggs');
+
+$insert = $db->insert($table,$columns);
+```
+
+### Insert Results
+
+```php
+if($insert){
+    echo $db->rowCount() . ' records affected';
+} else {
+    echo $db->getError();
+}
+```
+
+
+<hr>
+## Update Records
+
+#### Update (all) records using 'bind' params
+
+```php
+$table   = 'names';
+$columns = array('firstname' => 'Fred', 'surname' => 'Bloggs');
+
+$update = $db->update($table,$columns);
+```
+
+#### Update records using 'bind' params and 'where' string
+
+````php
+$table   = 'names';
+$columns = array('firstname' => 'Fred 2', 'surname' => 'Bloggs 2');
+$where   = "firstname = 'Fred' AND surname = 'Bloggs'";  //'WHERE' is not needed, or spaces
+
+$update = $db->update($table,$columns,$where);
+```
+
+
+#### Update specific records using 'bind' params and 'where'
+```php
+$table   = 'names';
+$columns = array('firstname' => 'Fred 2', 'surname' => 'Bloggs 2');
+$where   = array('firstname' => 'Fred',   'surname' => 'Bloggs');
+
+$update = $db->update($table,$columns,$where);
+```
+
+### Update Results
+````php
+if($update){
+    echo $db->rowCount() . ' records affected';
+} else {
+    echo $db->getError();
+}
+```
+
+
+<hr>
+## Delete Records
+
+
+#### Delete records using a 'where' string
+
+```php
+$table  = 'names';
+$where  = "surname = 'Doe'";
+
+$delete = $db->delete($table,$where);
+```
+
+#### Delete records using a 'where' array
+
+```php
+$table = 'names';
+$where = array('surname'] = 'Doe');
+
+$delete = $db->delete($table,$where);
+```
+
+### Delete Results
+```php
+if($delete){
+    echo $db->rowCount() . ' records affected';
+} else {
+    echo $db->getError();
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
