@@ -239,13 +239,13 @@ $result = $db->delete($table,$where);
 $table = 'names';
 $where = array('surname' => 'Doe');
 
-$delete = $db->delete($table,$where);
+$result = $db->delete($table,$where);
 
 
 // DELETE STATUS
 // -------------
-// Success can be tested using $delete
-if($delete){
+// Success can be tested using $result
+if($result){
     echo $db->rowCount() . ' records affected';
 } else {
     echo $db->getError();
