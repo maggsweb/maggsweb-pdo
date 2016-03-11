@@ -1,5 +1,15 @@
 <?php 
 
+/**
+ * MyPDO Class
+ *
+ * @category  Database Access
+ * @author    Chris Maggs <git@maggsweb.co.uk>
+ * @copyright Copyright (c)2016
+ * @license   http://opensource.org/licenses/gpl-3.0.html GNU Public License
+ * @version   1.0
+ **/
+
 class MyPDO {
  
     private $host   = DB_HOST;
