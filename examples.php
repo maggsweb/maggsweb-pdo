@@ -25,7 +25,7 @@ $sql = "INSERT INTO `names` VALUES
 
 $db->query($sql);
 
-$results = $db->execute();
+$result = $db->execute();
 
 
 // Run a query and return the results
@@ -35,9 +35,9 @@ $sql = "SELECT * FROM `names`";
 
 $db->query($sql);
 
-$results = $db->fetchAll();     // Multiple rows
+$result = $db->fetchAll();     // Multiple rows
 //$result  = $db->fetchOne();   // Single row
-//$results = $db->fetchAll('Array');  // Multiple rows, returned as a multi-dimensional array
+//$result  = $db->fetchAll('Array');  // Multiple rows, returned as a multi-dimensional array
 //$result  = $db->fetchOne('Array');  // Single row, returned as an array
 
 
@@ -49,13 +49,13 @@ $sql = "SELECT * FROM `names` WHERE firstname = :firstname";
 $db->query($sql);
 $db->bind(':firstname', 'John');
 
-$results = $db->fetchAll(); 
+$result = $db->fetchAll(); 
 
 
 // QUERY RESULTS
 //-----------------------------------------------------
 // All results can be tested and outputted using $result
-if($results||$result){
+if($result){
     echo $db->rowCount() . ' records affected';
     //foreach($results as $result){
     //    echo $result->{$column};
@@ -74,7 +74,7 @@ if($results||$result){
 
 $table   = 'names';
 
-$results = $db->selectAll($table);
+$result = $db->selectAll($table);
 
 
 // Select specific columns and return multiple rows
@@ -83,7 +83,7 @@ $results = $db->selectAll($table);
 $table   = 'names';
 $columns = 'firstname, surname';
 
-$results = $db->selectAll($table,$columns);
+$result = $db->selectAll($table,$columns);
 
 
 // Select specific columns and return multiple rows using a 'where' string
@@ -91,9 +91,9 @@ $results = $db->selectAll($table,$columns);
 
 $table   = 'names';
 $columns = 'firstname';
-$where   = "surname LIKE '%D'";
+$where   = "surname LIKE 'D%'";
 
-$results = $db->selectAll($table,$columns,$where);
+$result = $db->selectAll($table,$columns,$where);
 
 
 // Select all columns and return multiple rows using a 'where' array
@@ -102,7 +102,7 @@ $results = $db->selectAll($table,$columns,$where);
 $table   = 'names';
 $where   = array('surname' => 'Doe');
 
-$results = $db->selectAll($table,false,$where);
+$result = $db->selectAll($table,false,$where);
 
 
 // Select one row using a 'where' string
@@ -146,7 +146,7 @@ $result = $db->selectAll($table,false,false,$extra);
 // SELECT RESULTS
 // ---------------
 // All results can be tested and outputted using $result
-if($results||$result){
+if($result){
     echo $db->rowCount() . ' records affected';
     //foreach($results as $result){
     //    echo $result->{$column};
@@ -170,7 +170,7 @@ $result = $db->insert($table,$columns);
 
 // INSERT STATUS
 // -------------
-// Success can be tested using $insert
+// Success can be tested using $result
 if($result){
     echo $db->rowCount() . ' records affected';
 } else {
@@ -212,7 +212,7 @@ $result = $db->update($table,$columns,$where);
 
 // UPDATE STATUS
 // -------------
-// Success can be tested using $update
+// Success can be tested using $result
 if($result){
     echo $db->rowCount() . ' records affected';
 } else {
@@ -244,7 +244,7 @@ $result = $db->delete($table,$where);
 
 // DELETE STATUS
 // -------------
-// Success can be tested using $delete
+// Success can be tested using $result
 if($result){
     echo $db->rowCount() . ' records affected';
 } else {
