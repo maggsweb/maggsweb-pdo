@@ -38,6 +38,7 @@ class MyPDO {
     public function query($query)
     {
         $this->stmt = $this->dbh->prepare($query);
+        return $this; //allows chaining
     }
     
     
@@ -65,6 +66,7 @@ class MyPDO {
             }
         }
         $this->stmt->bindValue($param, $value, $type);
+        return $this; //allows chaining
     }
     
     
