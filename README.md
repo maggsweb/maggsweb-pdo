@@ -85,6 +85,11 @@ $db->query($sql);
 $db->bind(':firstname', 'Chris');
 
 $results = $db->fetchAll(); 
+
+or
+
+$results = $db->query($sql)->bind(':firstname', 'Chris')->fetchAll();
+
 ```
 
 ### Query Results
