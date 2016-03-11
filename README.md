@@ -86,7 +86,7 @@ $db->bind(':firstname', 'Chris');
 
 $results = $db->fetchAll(); 
 
-or
+// or
 
 $results = $db->query($sql)->bind(':firstname', 'Chris')->fetchAll();
 

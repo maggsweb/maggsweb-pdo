@@ -51,6 +51,10 @@ $db->bind(':firstname', 'John');
 
 $result = $db->fetchAll(); 
 
+//or
+
+$result = $db->query($sql)->bind(':firstname', 'John')->fetchAll();
+
 
 // QUERY RESULTS
 //-----------------------------------------------------
