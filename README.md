@@ -129,6 +129,15 @@ if($result){
 }
 ```
 
+### last Insert ID
+
+```php
+
+$id = $db->insertID();
+
+```
+
+
 
 <hr>
 
