@@ -129,7 +129,7 @@ if($result){
 }
 ```
 
-### last Insert ID
+### Last Insert ID
 
 ```php
 
