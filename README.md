@@ -6,8 +6,7 @@ A simple PHP database wrapper for MySQL using PDO
 
 ### Table of Contents
 **[Initialization](#initialization)**  
-**[Raw Query](#raw-query)**  
-**[SQL Select](#sql-select)**  
+**[Query](#query)**  
 **[Insert Records](#insert-records)**  
 **[Update Records](#update-records)**  
 **[Delete Records](#delete-records)**  
@@ -32,11 +31,11 @@ $db = new MyPDO();
 
 <hr>
 
-## Raw Query
+## Query
 
 #### Run a query, any query..
 
-To execute a raw string of SQL, pass the complete SQL string to **->query**
+To execute a string of SQL, pass the complete SQL string to **->query**
 
 ```php
 $sql = "INSERT INTO `names` VALUES 
@@ -54,21 +53,21 @@ Call **->execute** to execute the query.  This returns true|false;
 
 #### Run a query and return the results
 
-To return the results from **->query** for use, call **->fetchAll()** for multiple rows or **->fetchOne** for a single row. Results are returned as an Array of Objects.  Optionally, pass 'Array' to the fetch functions to return results as an Array of Arrays.
+To return the results from **->query** for use call **->fetchAll()** for multiple rows, **->fetchRow** for a single row or **->fetchOne** for a single value. Results are returned as an Array of Objects an Object or a value.  Optionally, passing 'Array' to the fetch functions will return results as a Multi-dimensional Array.
 
 ```php
 $sql = "SELECT * FROM `names`";
 
 $db->query($sql);
 
-$results = $db->fetchAll();     // Multiple rows
-//$result  = $db->fetchOne();   // Single row
-
-//$results = $db->fetchAll('Array');  // Multiple rows, returned as a multi-dimensional array
-//$result  = $db->fetchOne('Array');  // Single row, returned as an array
+$results = $db->fetchAll();             // Multiple rows
+//$result  = $db->fetchRow();           // Single row
+//$result  = $db->fetchAll('Array');    // Multiple rows, returned as a multi-dimensional array
+//$result  = $db->fetchRow('Array');    // Single row, returned as an array
+//$result  = $db->fetchOne();           // Single value
 ```
 
-On success, **$result** will be an Object Array (fetchAll) or an Object (fetchOne)
+On success, **$result** will be an Object Array (fetchAll) or an Object (fetchRow) or a value (fetchOne)
 
 On failure, call **->getError** to display the SQL error message
 
@@ -94,110 +93,18 @@ $results = $db->query($sql)->bind(':firstname', 'Chris')->fetchAll();
 
 ### Query Results
 
-On success, call **->rowCount** to return the number of rows updated (if applicable)
-
 On failure, call **->getError** to display the SQL error message
 
 ```php
-if($results||$result){
-    echo $db->rowCount() . ' records affected';
-    //foreach($results as $result){
-    //    echo $result->{$column};
-    //}
+if($results){
+    foreach($results as $result){
+        echo $result->{$column};
+    }
 } else {
     echo $db->getError();
 }
 ```
 
-
-
-<hr>
-
-##SQL Select
-
-#### Select all columns and return multiple rows
-
-```php
-$table   = 'names';
-
-$results = $db->selectAll($table);
-```
-
-#### Select specific columns and return multiple rows
-
-```php
-$table   = 'names';
-$columns = 'firstname, surname';
-
-$results = $db->selectAll($table,$columns);
-```
-
-#### Select specific columns and return multiple rows using a 'where' string
-
-```php
-$table   = 'names';
-$columns = 'firstname';
-$where   = "surname LIKE '%D'";
-
-$results = $db->selectAll($table,$columns,$where);
-```
-
-#### Select all columns and return multiple rows using a 'where' array
-
-```php
-$table   = 'names';
-$where   = array('surname' => 'Doe');
-
-$results = $db->selectAll($table,false,$where);
-```
-
-#### Select one row using a 'where' string
-```php
-$table  = 'names';
-$where  = array('firstname' => 'John', 'surname' => 'Doe');
-
-$result = $db->selectRow($table,false,$where);
-```
-
-#### Select one row using a 'where' array
-```php
-$table   = 'names';
-$columns = 'id';
-$where   = array('firstname' => 'John', 'surname' => 'Doe');
-
-$result  = $db->selectRow($table,$columns,$where);
-```
-
-#### Select one value using a 'where' array
-
-```php
-$table   = 'names';
-$columns = 'id';
-$where   = array('firstname' => 'John', 'surname' => 'Doe');
-
-$result  = $db->selectOne($table,$columns,$where);
-```
-
-#### Select multiple rows and order the results
-
-```php
-$table = 'names';
-$extra = 'ORDER BY surname ASC';
-
-$result = $db->selectAll($table,false,false,$extra);
-```
-
-### Select Results
-```php
-if($results||$result){
-    echo $db->rowCount() . ' records affected';
-    //foreach($results as $result){
-    //    echo $result->{$column};
-    //}
-} else {
-    echo $db->getError();
-}
-```
 
 <hr>
 
@@ -297,12 +204,6 @@ if($result){
     echo $db->getError();
 }
 ```
-
-
-
-
-
-
 
 
 

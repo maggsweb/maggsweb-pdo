@@ -35,11 +35,11 @@ $sql = "SELECT * FROM `names`";
 
 $db->query($sql);
 
-$result = $db->fetchAll();     // Multiple rows
-//$result  = $db->fetchOne();   // Single row
-//$result  = $db->fetchAll('Array');  // Multiple rows, returned as a multi-dimensional array
-//$result  = $db->fetchOne('Array');  // Single row, returned as an array
-
+$result = $db->fetchAll();              // Multiple rows
+//$result  = $db->fetchRow();           // Single row
+//$result  = $db->fetchAll('Array');    // Multiple rows, returned as a multi-dimensional array
+//$result  = $db->fetchRow('Array');    // Single row, returned as an array
+//$result  = $db->fetchOne();           // Single value
 
 // Run a query  using 'bound' params and return results
 //-----------------------------------------------------
@@ -51,106 +51,18 @@ $db->bind(':firstname', 'John');
 
 $result = $db->fetchAll(); 
 
+// or
+
+$result = $db->query($sql)->bind(':firstname', 'John')->fetchAll(); 
+
 
 // QUERY RESULTS
 //-----------------------------------------------------
 // All results can be tested and outputted using $result
 if($result){
-    echo $db->rowCount() . ' records affected';
-    //foreach($results as $result){
-    //    echo $result->{$column};
-    //}
-} else {
-    echo $db->getError();
-}
-
-
-
-// SELECT
-// =================================================================
-
-// Select all columns and return multiple rows
-//--------------------------------------------
-
-$table   = 'names';
-
-$result = $db->selectAll($table);
-
-
-// Select specific columns and return multiple rows
-//-------------------------------------------------
-
-$table   = 'names';
-$columns = 'firstname, surname';
-
-$result = $db->selectAll($table,$columns);
-
-
-// Select specific columns and return multiple rows using a 'where' string
-//------------------------------------------------------------------------
-
-$table   = 'names';
-$columns = 'firstname';
-$where   = "surname LIKE 'D%'";
-
-$result = $db->selectAll($table,$columns,$where);
-
-
-// Select all columns and return multiple rows using a 'where' array
-//------------------------------------------------------------------
-
-$table   = 'names';
-$where   = array('surname' => 'Doe');
-
-$result = $db->selectAll($table,false,$where);
-
-
-// Select one row using a 'where' string
-//--------------------------------------
-
-$table  = 'names';
-$where  = array('firstname' => 'John', 'surname' => 'Doe');
-
-$result = $db->selectRow($table,false,$where);
-
-
-// Select one row using a 'where' array
-//-------------------------------------
-
-$table   = 'names';
-$columns = 'id';
-$where   = array('firstname' => 'John', 'surname' => 'Doe');
-
-$result  = $db->selectRow($table,$columns,$where);
-
-
-// Select one value using a 'where' array
-//-------------------------------------
-
-$table   = 'names';
-$columns = 'id';
-$where   = array('firstname' => 'John', 'surname' => 'Doe');
-
-$result  = $db->selectOne($table,$columns,$where);
-
-
-// Select multiple rows and order the results
-//-------------------------------------------
-
-$table = 'names';
-$extra = 'ORDER BY surname ASC';
-
-$result = $db->selectAll($table,false,false,$extra);
-
-
-// SELECT RESULTS
-// ---------------
-// All results can be tested and outputted using $result
-if($result){
-    echo $db->rowCount() . ' records affected';
-    //foreach($results as $result){
-    //    echo $result->{$column};
-    //}
+    foreach($results as $result){
+        echo $result->$column;
+    }
 } else {
     echo $db->getError();
 }

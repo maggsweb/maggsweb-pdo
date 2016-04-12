@@ -25,8 +25,7 @@ $db = new MyPDO();
 //////////////////////////////////////////////////////////////////////////////////////////
 
 $sql = "DROP TABLE `names`;";
-$db->query($sql);
-$db->execute();
+$db->query($sql)->execute();
 
 $sql = "CREATE TABLE `names` (
     `id`          int(5)      NOT NULL AUTO_INCREMENT,
@@ -34,8 +33,7 @@ $sql = "CREATE TABLE `names` (
     `surname`     varchar(50) DEFAULT NULL,
     PRIMARY KEY (`id`)
 );";
-$db->query($sql);
-$db->execute();
+$db->query($sql)->execute();
 
 
 
