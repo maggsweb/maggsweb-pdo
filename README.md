@@ -153,7 +153,7 @@ $result = $db->update($table,$columns);
 
 #### Update records using 'bind' params and 'where' string
 
-````php
+```php
 $table   = 'names';
 $columns = array('firstname' => 'Fred 2', 'surname' => 'Bloggs 2');
 $where   = "firstname = 'Fred' AND surname = 'Bloggs'";  //'WHERE' is not needed, or spaces
