@@ -199,7 +199,7 @@ class MyPDO {
         // Build column bindings
         $query .= $this->buildColumnBindString($columns);
 
-            // Build the WHERE
+        // Build the WHERE
         $query .= $this->buildWhereString($where);
 
         // Build LIMIT
