@@ -108,7 +108,7 @@ if($results){
 
 <hr>
 
-##Insert Records
+## Insert Records
 
 #### Insert a record using 'bind' params
 
@@ -136,7 +136,6 @@ if($result){
 $id = $db->insertID();
 
 ```
-
 
 
 <hr>
@@ -185,7 +184,6 @@ if($result){
 <hr>
 
 ## Delete Records
-
 
 #### Delete records using a 'where' string
 
