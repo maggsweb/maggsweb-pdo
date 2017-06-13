@@ -172,7 +172,7 @@ $result = $db->update($table,$columns,$where);
 ```
 
 ### Update Results
-````php
+```php
 if($result){
     echo $db->rowCount() . ' records affected';
 } else {
