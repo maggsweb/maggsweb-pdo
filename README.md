@@ -1,6 +1,6 @@
 # MyPDO
 
-A simple PHP database wrapper for MySQL using PDO
+A easy-to-use PHP database wrapper for MySQL using PDO
 
 <hr>
 
