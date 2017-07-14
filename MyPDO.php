@@ -35,9 +35,17 @@ class MyPDO {
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         );
 
-        $this->dbh = new PDO($dsn, $this->user, $this->pass, $options);
-        $this->error = false;
-        
+        try {
+            
+            $this->dbh = new PDO($dsn, $this->user, $this->pass, $options);
+            $this->error = false;
+            
+        } catch (PDOException $e) {
+            
+            $this->dbh = NULL;
+            $this->error = $e->getMessage();
+            
+        }
     }
     
     
