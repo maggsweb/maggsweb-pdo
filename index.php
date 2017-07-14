@@ -13,14 +13,10 @@ define('DB_PASS', '');
  */
 require_once 'MyPDO.php';
 
-
 /**
  * Instantiate DB class for use
  */
 $db = new MyPDO();
-
-
-//See examples.php for usage examples
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -35,6 +31,17 @@ $sql = "CREATE TABLE `names` (
 );";
 $db->query($sql)->execute();
 
+$sql = "INSERT INTO `names` VALUES 
+    (NULL, 'Joe',  'Bloggs'),
+    (NULL, 'John', 'Doe'),
+    (NULL, 'Jane', 'Doe');";
+$db->query($sql);
+$result = $db->execute();
 
+$sql = "SELECT * FROM `names`";
+$db->query($sql);
+$result = $db->fetchAll();
 
-
+echo '<pre>';
+print_r($result);
+echo '</pre>';
