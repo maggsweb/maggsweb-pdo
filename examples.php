@@ -4,6 +4,12 @@
 // Instantiate $db as a db connection
 // include 'index.php';
 
+// Query
+// ===========================================================
+
+// Run a query, any query..
+//-------------------------
+
 //$sql = "CREATE TABLE `names` (
 //    `id`          int(5)      NOT NULL AUTO_INCREMENT,
 //    `firstname`   varchar(50) DEFAULT NULL,
@@ -11,22 +17,12 @@
 //    PRIMARY KEY (`id`)
 //);";
 
-
-// Query
-// ===========================================================
-
-// Run a query, any query..
-//-------------------------
-
 $sql = "INSERT INTO `names` VALUES 
     (NULL, 'Joe',  'Bloggs'),
     (NULL, 'John', 'Doe'),
     (NULL, 'Jane', 'Doe');";
 
-$db->query($sql);
-
-$result = $db->execute();
-
+$db->query($sql)->execute();
 
 // Run a query and return the results
 //------------------------------------
@@ -66,7 +62,6 @@ if($result){
 } else {
     echo $db->getError();
 }
-
 
 
 // INSERT RECORDS

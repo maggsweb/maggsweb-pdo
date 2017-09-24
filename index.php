@@ -3,10 +3,10 @@
 /**
  * Define database connection as constants
  */
-define('DB_HOST', '127.0.0.1');
-define('DB_USER', 'root');
-define('DB_NAME', 'pdotest');
-define('DB_PASS', '');
+define('DBHOST', '127.0.0.1');
+define('DBUSER', 'root');
+define('DBNAME', 'pdotest');
+define('DBPASS', '');
 
 /**
  * Include MyPDO class file
@@ -35,8 +35,7 @@ $sql = "INSERT INTO `names` VALUES
     (NULL, 'Joe',  'Bloggs'),
     (NULL, 'John', 'Doe'),
     (NULL, 'Jane', 'Doe');";
-$db->query($sql);
-$result = $db->execute();
+$db->query($sql)->execute();
 
 $sql = "SELECT * FROM `names`";
 $db->query($sql);

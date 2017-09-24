@@ -18,10 +18,10 @@ An easy-to-use PDO Database wrapper for PHP & MySQL
 To use this class,  set your database connection constants, download and include 'MyPDO.php' into your project and instantiate a database connection.
 
 ```php
-define('DB_HOST', '');  //eg: 127.0.0.1
-define('DB_USER', '');  //eg: root
-define('DB_NAME', '');  //eg: admin
-define('DB_PASS', '');  //eg: password
+define('DBHOST', '');  //eg: 127.0.0.1
+define('DBUSER', '');  //eg: root
+define('DBNAME', '');  //eg: admin
+define('DBPASS', '');  //eg: password
 
 require_once ('MyPDO.php');
 
