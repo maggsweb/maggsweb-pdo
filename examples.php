@@ -10,12 +10,14 @@
 // Run a query, any query..
 //-------------------------
 
-//$sql = "CREATE TABLE `names` (
-//    `id`          int(5)      NOT NULL AUTO_INCREMENT,
-//    `firstname`   varchar(50) DEFAULT NULL,
-//    `surname`     varchar(50) DEFAULT NULL,
-//    PRIMARY KEY (`id`)
-//);";
+$sql = "CREATE TABLE `names` (
+    `id`          int(5)      NOT NULL AUTO_INCREMENT,
+    `firstname`   varchar(50) DEFAULT NULL,
+    `surname`     varchar(50) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+);";
+
+$db->query($sql)->execute();
 
 $sql = "INSERT INTO `names` VALUES 
     (NULL, 'Joe',  'Bloggs'),
