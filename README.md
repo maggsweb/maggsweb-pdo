@@ -39,9 +39,9 @@ To execute a string of SQL, pass the complete SQL string to **->query**
 
 ```php
 $sql = "INSERT INTO `names` VALUES 
-    (NULL, 'Chris',  'Maggs'),
-    (NULL, 'Chris2', 'Maggs2'),
-    (NULL, 'Chris3', 'Maggs3');";
+    (NULL, 'Joe',  'Bloggs'),
+    (NULL, 'John', 'Bloggs'),
+    (NULL, 'Jane', 'Bloggs');";
 
 $db->query($sql);
 
@@ -62,8 +62,8 @@ $db->query($sql);
 
 $results = $db->fetchAll();             // Multiple rows
 //$result  = $db->fetchRow();           // Single row
-//$result  = $db->fetchAll('Array');    // Multiple rows, returned as a multi-dimensional array
 //$result  = $db->fetchRow('Array');    // Single row, returned as an array
+//$result  = $db->fetchAll('Array');    // Multiple rows, returned as a multi-dimensional array
 //$result  = $db->fetchOne();           // Single value
 ```
 
@@ -215,7 +215,8 @@ if($result){
 
 
 
-
+<hr>
+More examples are provided in 'examples.php'
 
 
 
