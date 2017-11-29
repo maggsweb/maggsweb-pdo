@@ -32,7 +32,9 @@ class MyPDO {
             // if there is already an established connection to the database.
             PDO::ATTR_PERSISTENT => true, 
             // Using ERRMODE_EXCEPTION will throw an exception if an error occurs.
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            // Force UTF8 encoding throughout
+            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
         );
 
         try {
