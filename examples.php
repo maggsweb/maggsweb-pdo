@@ -34,10 +34,10 @@ $sql = "SELECT * FROM `names`";
 $db->query($sql);
 
 $result = $db->fetchAll();              // Multiple rows
-//$result  = $db->fetchRow();           // Single row
-//$result  = $db->fetchAll('Array');    // Multiple rows, returned as a multi-dimensional array
-//$result  = $db->fetchRow('Array');    // Single row, returned as an array
-//$result  = $db->fetchOne();           // Single value
+$result  = $db->fetchRow();             // Single row
+$result  = $db->fetchAll('Array');      // Multiple rows, returned as a multi-dimensional array
+$result  = $db->fetchRow('Array');      // Single row, returned as an array
+$result  = $db->fetchOne();             // Single value
 
 // Run a query  using 'bound' params and return results
 //-----------------------------------------------------
@@ -81,7 +81,7 @@ $result = $db->insert($table,$columns);
 // -------------
 // Success can be tested using $result
 if($result){
-    echo $db->rowCount() . ' records affected';
+    echo $db->numRows() . ' records affected';
 } else {
     echo $db->getError();
 }
@@ -123,7 +123,7 @@ $result = $db->update($table,$columns,$where);
 // -------------
 // Success can be tested using $result
 if($result){
-    echo $db->rowCount() . ' records affected';
+    echo $db->numRows() . ' records affected';
 } else {
     echo $db->getError();
 }
@@ -155,7 +155,7 @@ $result = $db->delete($table,$where);
 // -------------
 // Success can be tested using $result
 if($result){
-    echo $db->rowCount() . ' records affected';
+    echo $db->numRows() . ' records affected';
 } else {
     echo $db->getError();
 }

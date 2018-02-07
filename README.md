@@ -123,7 +123,7 @@ $result = $db->insert($table,$columns);
 
 ```php
 if($result){
-    echo $db->rowCount() . ' records affected';
+    echo $db->numRows() . ' records affected';
 } else {
     echo $db->getError();
 }
@@ -174,7 +174,7 @@ $result = $db->update($table,$columns,$where);
 ### Update Results
 ```php
 if($result){
-    echo $db->rowCount() . ' records affected';
+    echo $db->numRows() . ' records affected';
 } else {
     echo $db->getError();
 }
@@ -206,7 +206,7 @@ $result = $db->delete($table,$where);
 ### Delete Results
 ```php
 if($result){
-    echo $db->rowCount() . ' records affected';
+    echo $db->numRows() . ' records affected';
 } else {
     echo $db->getError();
 }

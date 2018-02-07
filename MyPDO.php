@@ -56,7 +56,10 @@ class MyPDO {
      * @param type $query
      */
     public function query($query)
-    {
+    {        
+        //$query = filter_var ($query, FILTER_SANITIZE_STRING,
+        //                             FILTER_FLAG_NO_ENCODE_QUOTES);
+        
         $this->stmt = $this->dbh->prepare($query);
         return $this; //allows chaining
     }
