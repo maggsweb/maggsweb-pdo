@@ -1,6 +1,4 @@
 <?php
-
-
 /**
  * MyPDO Class.
  *
@@ -12,6 +10,7 @@
  *
  * @version   1.1
  **/
+
 class MyPDO
 {
     private $host = DBHOST;
