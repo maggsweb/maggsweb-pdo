@@ -1,7 +1,8 @@
-<?php 
+<?php
+
 
 /**
- * Define database connection as constants
+ * Define database connection as constants.
  */
 define('DBHOST', '127.0.0.1');
 define('DBUSER', 'root');
@@ -9,26 +10,26 @@ define('DBNAME', 'pdotest');
 define('DBPASS', '');
 
 /**
- * Include MyPDO class file
+ * Include MyPDO class file.
  */
 require_once 'MyPDO.php';
 
 /**
- * Instantiate DB class for use
+ * Instantiate DB class for use.
  */
 $db = new MyPDO();
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-$sql = "DROP TABLE `names`;";
+$sql = 'DROP TABLE `names`;';
 $db->query($sql)->execute();
 
-$sql = "CREATE TABLE `names` (
+$sql = 'CREATE TABLE `names` (
     `id`          int(5)      NOT NULL AUTO_INCREMENT,
     `firstname`   varchar(50) DEFAULT NULL,
     `surname`     varchar(50) DEFAULT NULL,
     PRIMARY KEY (`id`)
-);";
+);';
 $db->query($sql)->execute();
 
 $sql = "INSERT INTO `names` VALUES 
@@ -37,7 +38,7 @@ $sql = "INSERT INTO `names` VALUES
     (NULL, 'Jane', 'Doe');";
 $db->query($sql)->execute();
 
-$sql = "SELECT * FROM `names`";
+$sql = 'SELECT * FROM `names`';
 $db->query($sql);
 $result = $db->fetchAll();
 
