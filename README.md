@@ -1,4 +1,4 @@
-# MyPDO
+# Maggsweb PDO
 
 An easy-to-use PDO Database wrapper for PHP & MySQL
 
