@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Define database connection as constants.
  */
@@ -17,7 +16,7 @@ require_once 'MyPDO.php';
 /**
  * Instantiate DB class for use.
  */
-$db = new MyPDO();
+$db = new MyPDO(DBHOST,DBUSER,DBNAME,DBPASS);
 
 //////////////////////////////////////////////////////////////////////////////////////////
 

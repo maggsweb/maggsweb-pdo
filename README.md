@@ -25,7 +25,7 @@ define('DBPASS', '');  //eg: password
 
 require_once ('MyPDO.php');
 
-$db = new MyPDO();
+$db = new MyPDO(DBHOST, DBUSER, DBNAME, DBPASS);
 ```
 
 

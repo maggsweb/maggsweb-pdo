@@ -12,18 +12,62 @@
  **/
 class MyPDO
 {
-    private $host = DBHOST;
-    private $user = DBUSER;
-    private $pass = DBPASS;
-    private $dbname = DBNAME;
+    /**
+     * Host name
+     * @var string
+     */
+    private $host;
 
+    /**
+     * Username
+     * @var string
+     */
+    private $user;
+
+    /**
+     * Password
+     * @var string
+     */
+    private $pass;
+
+    /**
+     * DB Name
+     * @var string
+     */
+    private $dbname;
+
+    /**
+     * Database handle
+     * @var object
+     */
     private $dbh;
+
+    /**
+     * Error message
+     * @var string
+     */
     private $error;
+
+    /**
+     * Query statement
+     * @var string
+     */
     private $stmt;
 
-    public function __construct()
+
+    /**
+     * MyPDO constructor.
+     * @param $host
+     * @param $user
+     * @param $pass
+     * @param $dbname
+     */
+    public function __construct($host,$user,$pass,$dbname)
     {
-        $dsn = "mysql:host=$this->host;dbname=$this->dbname";
+        $this->host = $host;
+        $this->user = $user;
+        $this->pass = $pass;
+        $this->dbname = $dbname;
 
         $options = [
             // This option sets the connection type to the database to be persistent.
@@ -37,7 +81,7 @@ class MyPDO
         ];
 
         try {
-            $this->dbh = new PDO($dsn, $this->user, $this->pass, $options);
+            $this->dbh = new PDO("mysql:host=$this->host;dbname=$this->dbname", $this->user, $this->pass, $options);
             $this->error = false;
         } catch (PDOException $e) {
             $this->dbh = null;
@@ -46,26 +90,25 @@ class MyPDO
     }
 
     /**
-     * @desc Prepare the raw SQL
-     *
-     * @param type $query
+     * Prepare query statement
+     * 
+     * @param $query
+     * @return $this
      */
     public function query($query)
     {
-        //$query = filter_var ($query, FILTER_SANITIZE_STRING,
-        //                             FILTER_FLAG_NO_ENCODE_QUOTES);
-
         $this->stmt = $this->dbh->prepare($query);
 
-        return $this; //allows chaining
+        return $this; 
     }
 
     /**
-     * @desc Bind a specific column/value
+     * Bind a specific column/value
      *
-     * @param type $param
-     * @param type $value
-     * @param type $type
+     * @param $param
+     * @param $value
+     * @param null $type
+     * @return $this
      */
     public function bind($param, $value, $type = null)
     {
@@ -86,13 +129,13 @@ class MyPDO
         }
         $this->stmt->bindValue($param, $value, $type);
 
-        return $this; //allows chaining
+        return $this; 
     }
 
     /**
-     * @desc Run Query!  This is called automatically when fetching results
+     * Run Query!  This is called automatically when fetching results
      *
-     * @return type
+     * @return bool
      */
     public function execute()
     {
@@ -106,11 +149,10 @@ class MyPDO
     }
 
     /**
-     * @desc Fetch multiple rows as ObjectArray or MultiDemensional Array
+     * Fetch multiple rows as ObjectArray or MultiDimensional Array
      *
-     * @param type $type
-     *
-     * @return type
+     * @param string $type
+     * @return mixed
      */
     public function fetchAll($type = 'Object')
     {
@@ -123,11 +165,10 @@ class MyPDO
     }
 
     /**
-     * @desc Fetch a single row as an Object or an Array
+     * Fetch a single row as an Object or an Array
      *
-     * @param type $type
-     *
-     * @return type
+     * @param string $type
+     * @return mixed
      */
     public function fetchRow($type = 'Object')
     {
@@ -140,9 +181,9 @@ class MyPDO
     }
 
     /**
-     * @desc fetch a single column value
+     * Fetch a single column value
      *
-     * @return type
+     * @return mixed
      */
     public function fetchOne()
     {
@@ -161,9 +202,8 @@ class MyPDO
      * Bind column values
      * Execute query
      *
-     * @param type $table
-     * @param type $columns
-     *
+     * @param $table
+     * @param $columns
      * @return bool
      */
     public function insert($table, $columns)
@@ -196,12 +236,11 @@ class MyPDO
      * Bind 'where' parameters
      * Execute query
      *
-     * @param type $table
-     * @param type $columns
-     * @param type $where   This can be passed as a String, or asd an Array
+     * @param $table
+     * @param $columns
+     * @param bool $where   This can be passed as a String, or asd an Array
      *                      The Array type is only for use when all WHERE operators are '='
-     * @param type $limit
-     *
+     * @param bool $limit
      * @return bool
      */
     public function update($table, $columns, $where = false, $limit = false)
@@ -243,11 +282,10 @@ class MyPDO
      * Bind 'where' parameters
      * Execute query
      *
-     * @param type $table
-     * @param type $where
-     * @param type $limit
-     *
-     * @return type
+     * @param $table
+     * @param bool $where
+     * @param bool $limit
+     * @return bool
      */
     public function delete($table, $where = false, $limit = false)
     {
@@ -272,17 +310,26 @@ class MyPDO
         return $this->execute();
     }
 
-    // Num-affected-rows for INSERT/UPDATE/DELETE
+    /**
+     * Num-affected-rows for INSERT/UPDATE/DELETE
+     * @return mixed
+     */
     public function numRows()
     {
         return $this->stmt->rowCount();
     }
 
+    /**
+     * @return mixed
+     */
     public function insertID()
     {
         return $this->dbh->lastInsertId();
     }
 
+    /**
+     * @return mixed
+     */
     public function debugDumpParams()
     {
         return $this->stmt->debugDumpParams();
@@ -293,6 +340,9 @@ class MyPDO
         return $this->error;
     }
 
+    /**
+     * @return mixed
+     */
     public function getQuery()
     {
         return $this->stmt->queryString;
@@ -303,9 +353,8 @@ class MyPDO
     //  ----------------------------------------------------------------
 
     /**
-     * @param type $where
-     *
-     * @return type
+     * @param $where
+     * @return string
      */
     private function buildWhereString($where)
     {
@@ -330,7 +379,7 @@ class MyPDO
     }
 
     /**
-     * @param type $where
+     * @param array $where
      */
     private function bindWhereParameters($where)
     {
@@ -344,9 +393,8 @@ class MyPDO
     }
 
     /**
-     * @param type $columns
-     *
-     * @return type
+     * @param array $columns
+     * @return string
      */
     private function buildColumnBindString($columns)
     {
@@ -361,9 +409,8 @@ class MyPDO
     }
 
     /**
-     * @param type $columns
-     *
-     * @return type
+     * @param array $columns
+     * @return string
      */
     private function buildColumnString($columns)
     {
@@ -376,9 +423,8 @@ class MyPDO
     }
 
     /**
-     * @param type $columns
-     *
-     * @return type
+     * @param $columns
+     * @return string
      */
     private function buildBindString($columns)
     {

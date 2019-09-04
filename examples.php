@@ -52,14 +52,14 @@ $result = $db->fetchAll();
 
 // or
 
-$result = $db->query($sql)->bind(':firstname', 'John')->fetchAll();
+$results = $db->query($sql)->bind(':firstname', 'John')->fetchAll();
 
 // QUERY RESULTS
 //-----------------------------------------------------
 // All results can be tested and outputted using $result
-if ($result) {
+if ($results) {
     foreach ($results as $result) {
-        echo $result->$column;
+        echo $result->{column_name};
     }
 } else {
     echo $db->getError();
@@ -71,7 +71,7 @@ if ($result) {
 // Insert a record using 'bind' params
 //------------------------------------
 
-$table = 'names';
+$table   = 'names';
 $columns = ['firstname' => 'Fred', 'surname' => 'Bloggs'];
 
 $result = $db->insert($table, $columns);
@@ -99,18 +99,18 @@ $result = $db->update($table, $columns);
 // Update records using 'bind' params and 'where' string
 // ------------------------------------------------------
 
-$table = 'names';
+$table   = 'names';
 $columns = ['firstname' => 'Fred 2', 'surname' => 'Bloggs 2'];
-$where = "firstname = 'Fred' AND surname = 'Bloggs'";  //'WHERE' is not needed, or spaces
+$where   = "firstname = 'Fred' AND surname = 'Bloggs'";  //'WHERE' is not needed, or spaces
 
 $result = $db->update($table, $columns, $where);
 
 // Update specific records using 'bind' params and 'where'
 //--------------------------------------------------------------
 
-$table = 'names';
+$table   = 'names';
 $columns = ['firstname' => 'Fred 2', 'surname' => 'Bloggs 2'];
-$where = ['firstname' => 'Fred',   'surname' => 'Bloggs'];
+$where   = ['firstname' => 'Fred',   'surname' => 'Bloggs'];
 
 $result = $db->update($table, $columns, $where);
 
