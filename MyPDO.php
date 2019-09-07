@@ -13,56 +13,63 @@
 class MyPDO
 {
     /**
-     * Host name
+     * Host name.
+     *
      * @var string
      */
     private $host;
 
     /**
-     * Username
+     * Username.
+     *
      * @var string
      */
     private $user;
 
     /**
-     * Password
+     * Password.
+     *
      * @var string
      */
     private $pass;
 
     /**
-     * DB Name
+     * DB Name.
+     *
      * @var string
      */
     private $dbname;
 
     /**
-     * Database handle
+     * Database handle.
+     *
      * @var object
      */
     private $dbh;
 
     /**
-     * Error message
+     * Error message.
+     *
      * @var string
      */
     private $error;
 
     /**
-     * Query statement
+     * Query statement.
+     *
      * @var string
      */
     private $stmt;
 
-
     /**
      * MyPDO constructor.
+     *
      * @param $host
      * @param $user
      * @param $pass
      * @param $dbname
      */
-    public function __construct($host,$user,$pass,$dbname)
+    public function __construct($host, $user, $pass, $dbname)
     {
         $this->host = $host;
         $this->user = $user;
@@ -90,24 +97,26 @@ class MyPDO
     }
 
     /**
-     * Prepare query statement
-     * 
+     * Prepare query statement.
+     *
      * @param $query
+     *
      * @return $this
      */
     public function query($query)
     {
         $this->stmt = $this->dbh->prepare($query);
 
-        return $this; 
+        return $this;
     }
 
     /**
-     * Bind a specific column/value
+     * Bind a specific column/value.
      *
      * @param $param
      * @param $value
      * @param null $type
+     *
      * @return $this
      */
     public function bind($param, $value, $type = null)
@@ -129,11 +138,11 @@ class MyPDO
         }
         $this->stmt->bindValue($param, $value, $type);
 
-        return $this; 
+        return $this;
     }
 
     /**
-     * Run Query!  This is called automatically when fetching results
+     * Run Query!  This is called automatically when fetching results.
      *
      * @return bool
      */
@@ -149,9 +158,10 @@ class MyPDO
     }
 
     /**
-     * Fetch multiple rows as ObjectArray or MultiDimensional Array
+     * Fetch multiple rows as ObjectArray or MultiDimensional Array.
      *
      * @param string $type
+     *
      * @return mixed
      */
     public function fetchAll($type = 'Object')
@@ -165,9 +175,10 @@ class MyPDO
     }
 
     /**
-     * Fetch a single row as an Object or an Array
+     * Fetch a single row as an Object or an Array.
      *
      * @param string $type
+     *
      * @return mixed
      */
     public function fetchRow($type = 'Object')
@@ -181,7 +192,7 @@ class MyPDO
     }
 
     /**
-     * Fetch a single column value
+     * Fetch a single column value.
      *
      * @return mixed
      */
@@ -204,6 +215,7 @@ class MyPDO
      *
      * @param $table
      * @param $columns
+     *
      * @return bool
      */
     public function insert($table, $columns)
@@ -238,9 +250,10 @@ class MyPDO
      *
      * @param $table
      * @param $columns
-     * @param bool $where   This can be passed as a String, or asd an Array
-     *                      The Array type is only for use when all WHERE operators are '='
+     * @param bool $where This can be passed as a String, or asd an Array
+     *                    The Array type is only for use when all WHERE operators are '='
      * @param bool $limit
+     *
      * @return bool
      */
     public function update($table, $columns, $where = false, $limit = false)
@@ -285,6 +298,7 @@ class MyPDO
      * @param $table
      * @param bool $where
      * @param bool $limit
+     *
      * @return bool
      */
     public function delete($table, $where = false, $limit = false)
@@ -311,7 +325,8 @@ class MyPDO
     }
 
     /**
-     * Num-affected-rows for INSERT/UPDATE/DELETE
+     * Num-affected-rows for INSERT/UPDATE/DELETE.
+     *
      * @return mixed
      */
     public function numRows()
@@ -354,6 +369,7 @@ class MyPDO
 
     /**
      * @param $where
+     *
      * @return string
      */
     private function buildWhereString($where)
@@ -394,6 +410,7 @@ class MyPDO
 
     /**
      * @param array $columns
+     *
      * @return string
      */
     private function buildColumnBindString($columns)
@@ -410,6 +427,7 @@ class MyPDO
 
     /**
      * @param array $columns
+     *
      * @return string
      */
     private function buildColumnString($columns)
@@ -424,6 +442,7 @@ class MyPDO
 
     /**
      * @param $columns
+     *
      * @return string
      */
     private function buildBindString($columns)

@@ -16,7 +16,7 @@ require_once 'MyPDO.php';
 /**
  * Instantiate DB class for use.
  */
-$db = new MyPDO(DBHOST,DBUSER,DBNAME,DBPASS);
+$db = new MyPDO(DBHOST, DBUSER, DBNAME, DBPASS);
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
