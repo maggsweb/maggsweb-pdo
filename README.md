@@ -1,3 +1,5 @@
+[![StyleCI](https://github.styleci.io/repos/50177395/shield?branch=master)](https://github.styleci.io/repos/50177395)
+
 # Maggsweb PDO
 
 An easy-to-use PDO Database wrapper for PHP & MySQL
