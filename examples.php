@@ -1,6 +1,5 @@
 <?php
 
-
 // Include db class file
 // Instantiate $db as a db connection
 // include 'index.php';
@@ -71,7 +70,7 @@ if ($results) {
 // Insert a record using 'bind' params
 //------------------------------------
 
-$table   = 'names';
+$table = 'names';
 $columns = ['firstname' => 'Fred', 'surname' => 'Bloggs'];
 
 $result = $db->insert($table, $columns);
@@ -99,18 +98,18 @@ $result = $db->update($table, $columns);
 // Update records using 'bind' params and 'where' string
 // ------------------------------------------------------
 
-$table   = 'names';
+$table = 'names';
 $columns = ['firstname' => 'Fred 2', 'surname' => 'Bloggs 2'];
-$where   = "firstname = 'Fred' AND surname = 'Bloggs'";  //'WHERE' is not needed, or spaces
+$where = "firstname = 'Fred' AND surname = 'Bloggs'";  //'WHERE' is not needed, or spaces
 
 $result = $db->update($table, $columns, $where);
 
 // Update specific records using 'bind' params and 'where'
 //--------------------------------------------------------------
 
-$table   = 'names';
+$table = 'names';
 $columns = ['firstname' => 'Fred 2', 'surname' => 'Bloggs 2'];
-$where   = ['firstname' => 'Fred',   'surname' => 'Bloggs'];
+$where = ['firstname' => 'Fred',   'surname' => 'Bloggs'];
 
 $result = $db->update($table, $columns, $where);
 
