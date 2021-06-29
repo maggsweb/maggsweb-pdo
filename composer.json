@@ -1,8 +1,16 @@
 {
     "name": "maggsweb/maggsweb-pdo",
-    "description": "PDO Database Wrapper",
-    "type": "project",
-    "license": "proprietary",
+    "description": "PDO Database Wrapper for PHP",
+    "type": "library",
+    "keywords": ["pdo", "mysql", "database"],
+    "homepage": "https://maggsweb.github.io/maggsweb-pdo/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Chris Maggs",
+            "email": "git@maggsweb.co.uk"
+        }
+    ],
     "require": {
         "php": "^7.2",
         "ext-mysqli": "*"
