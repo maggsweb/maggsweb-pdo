@@ -10,6 +10,10 @@
  *
  * @version   1.1
  **/
+namespace Maggsweb;
+
+use PDO;
+
 class MyPDO
 {
     /**
