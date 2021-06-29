@@ -1,0 +1,10 @@
+{
+    "name": "maggsweb/maggsweb-pdo",
+    "description": "PDO Database Wrapper",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": "^7.2",
+        "ext-mysqli": "*",
+    }
+}
