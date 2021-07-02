@@ -14,8 +14,8 @@
 namespace Maggsweb;
 
 use PDO;
-use PDOStatement;
 use PDOException;
+use PDOStatement;
 
 class MyPDO
 {
@@ -243,7 +243,7 @@ class MyPDO
      * @param $table
      * @param $columns
      * @param bool|string|array $where
-     * @param bool $limit
+     * @param bool              $limit
      *
      * @return bool
      */
@@ -258,7 +258,7 @@ class MyPDO
         $query .= $this->buildWhereString($where);
 
         // Build LIMIT
-        $query .= $limit ? " LIMIT " . (int) $limit : '';
+        $query .= $limit ? ' LIMIT '.(int) $limit : '';
 
         // Prepare Query
         $this->stmt = $this->dbh->prepare($query);
@@ -285,7 +285,7 @@ class MyPDO
      *
      * @param $table
      * @param bool|string|array $where
-     * @param bool $limit
+     * @param bool              $limit
      *
      * @return bool
      */
@@ -298,7 +298,7 @@ class MyPDO
         $query .= $this->buildWhereString($where);
 
         // Build LIMIT
-        $query .= $limit ? " LIMIT " . (int) $limit : '';
+        $query .= $limit ? ' LIMIT '.(int) $limit : '';
 
         // Prepare Query
         $this->stmt = $this->dbh->prepare($query);
@@ -441,9 +441,9 @@ class MyPDO
         return implode(', ', $tmp);
     }
 
-
     /**
      * @param $value
+     *
      * @return int|null
      */
     private function getType($value): ?int
