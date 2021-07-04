@@ -128,7 +128,7 @@ class MyPDO
      */
     public function bind($param, $value, $type = null): MyPDO
     {
-        $paramType = $type ? $this->getType($value) : null;
+        $paramType = $type ?? $this->getType($value);
 
         $this->stmt->bindValue($param, $value, $paramType);
 

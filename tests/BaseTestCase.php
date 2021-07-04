@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 include 'MyTestPDO.php';
 
+use Maggsweb\MyPDO;
 use Maggsweb\MyTestPDO;
 use PHPUnit\Framework\TestCase;
 
@@ -28,18 +29,15 @@ class BaseTestCase extends TestCase
 
     public static function setUpBeforeClass():void
     {
-        self::$dbh = new MyTestPDO();
-        self::$dbh->query('CREATE TABLE users (id INT PRIMARY KEY, name VARCHAR(50), age INTEGER)')->execute();
-        $users = [
-            ['id' => 1, 'name' => 'Chris', 'age' => 40],
-            ['id' => 2, 'name' => 'Clare', 'age' => 50],
-        ];
-        foreach ($users as $user) {
-            self::$dbh->insert('users', [
-                'id' => $user['id'],
-                'name' => $user['name'],
-                'age' => $user['age']
-            ]);
+        if (!self::$dbh instanceof MyPDO) {
+            // Create a populate DB if it doesn't exist
+            self::$dbh = new MyTestPDO();
+            self::$dbh->query('CREATE TABLE users (id INTEGER PRIMARY KEY, name VARCHAR(50), age INTEGER)')->execute();
+            self::$dbh->query('INSERT INTO users VALUES (1, "Clare", 50);')->execute();
+            self::$dbh->query('INSERT INTO users VALUES (2, "Chris", 40);')->execute();
+            self::$dbh->query('INSERT INTO users VALUES (3, "Colin", 30);')->execute();
+            self::$dbh->query('INSERT INTO users VALUES (4, "Craig", 20);')->execute();
+            self::$dbh->query('CREATE TABLE address (id INTEGER PRIMARY KEY, user INTEGER NOT NULL, address text)')->execute();
         }
         parent::setUpBeforeClass();
     }
@@ -47,18 +45,8 @@ class BaseTestCase extends TestCase
     public function setUp(): void
     {
         $this->db = self::$dbh;
+//        $this->db->query('TRUNCATE address')->execute();
         parent::setUp();
     }
 
-    public function tearDown(): void
-    {
-        $this->db = null;
-        parent::tearDown();
-    }
-
-    public static function tearDownAfterClass(): void
-    {
-        self::$dbh = null;
-        parent::tearDownAfterClass();
-    }
 }
