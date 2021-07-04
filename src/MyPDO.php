@@ -52,21 +52,21 @@ class MyPDO
      *
      * @var object
      */
-    private $dbh;
+    protected $dbh;
 
     /**
      * Error message.
      *
      * @var string
      */
-    private $error;
+    protected $error;
 
     /**
      * Query statement.
      *
      * @var PDOStatement
      */
-    private $stmt;
+    protected $stmt;
 
     /**
      * MyPDO constructor.
@@ -191,6 +191,7 @@ class MyPDO
     public function fetchOne()
     {
         $this->execute();
+
         $row = $this->stmt->fetch(PDO::FETCH_ASSOC);
 
         return array_values($row)[0];
