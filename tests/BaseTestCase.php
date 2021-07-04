@@ -5,8 +5,7 @@ declare(strict_types=1);
 /**
  * Overwrite MyPDO class with MyTestPDO
  * in order to change the __constructor()
- * to use sqlite:memory
- *
+ * to use sqlite:memory.
  */
 include 'MyTestPDO.php';
 
@@ -17,17 +16,18 @@ use PHPUnit\Framework\TestCase;
 class BaseTestCase extends TestCase
 {
     /**
-     * Static Instance of MyPDO
-     * @var MyTestPDO $dbh
+     * Static Instance of MyPDO.
+     *
+     * @var MyTestPDO
      */
     protected static $dbh;
 
     /**
-     * @var MyTestPDO $db
+     * @var MyTestPDO
      */
     protected $db;
 
-    public static function setUpBeforeClass():void
+    public static function setUpBeforeClass(): void
     {
         if (!self::$dbh instanceof MyPDO) {
             // Create a populate DB if it doesn't exist
@@ -48,5 +48,4 @@ class BaseTestCase extends TestCase
 //        $this->db->query('TRUNCATE address')->execute();
         parent::setUp();
     }
-
 }

@@ -14,8 +14,8 @@ class DatabaseTest extends BaseTestCase
      */
     public function DbExists()
     {
-        $this->assertInstanceOf(MyTestPDO::class, $this->db );
-        $this->assertInstanceOf(MyPDO::class, $this->db );
+        $this->assertInstanceOf(MyTestPDO::class, $this->db);
+        $this->assertInstanceOf(MyPDO::class, $this->db);
     }
 
     /**
@@ -26,5 +26,4 @@ class DatabaseTest extends BaseTestCase
         $this->expectException(PDOException::class);
         $this->db->query('SELECT * FROM notable')->fetchAll();
     }
-
 }
