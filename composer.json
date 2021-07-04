@@ -15,5 +15,13 @@
         "php": "^7.3",
         "ext-mysqli": "*",
         "ext-pdo": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "classmap": [
+            "src/"
+        ]
     }
 }

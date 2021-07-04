@@ -52,21 +52,21 @@ class MyPDO
      *
      * @var object
      */
-    private $dbh;
+    protected $dbh;
 
     /**
      * Error message.
      *
      * @var string
      */
-    private $error;
+    protected $error;
 
     /**
      * Query statement.
      *
      * @var PDOStatement
      */
-    private $stmt;
+    protected $stmt;
 
     /**
      * MyPDO constructor.
@@ -128,7 +128,7 @@ class MyPDO
      */
     public function bind($param, $value, $type = null): MyPDO
     {
-        $paramType = $type ? $this->getType($value) : null;
+        $paramType = $type ?? $this->getType($value);
 
         $this->stmt->bindValue($param, $value, $paramType);
 
@@ -191,6 +191,7 @@ class MyPDO
     public function fetchOne()
     {
         $this->execute();
+
         $row = $this->stmt->fetch(PDO::FETCH_ASSOC);
 
         return array_values($row)[0];
@@ -199,18 +200,12 @@ class MyPDO
     /**
      * Insert Query.
      *
-     * Build 'column string' from $column Array
-     * Bind  'column values' from $column Array
-     * Build query string
-     * Bind column values
-     * Execute query
-     *
-     * @param $table
-     * @param $columns
+     * @param string $table
+     * @param array $columns
      *
      * @return bool
      */
-    public function insert($table, $columns): bool
+    public function insert(string $table, array $columns): bool
     {
         $columnString = $this->buildColumnString($columns);
         $binderString = $this->buildBindString($columns);
@@ -232,22 +227,14 @@ class MyPDO
     /**
      * Update Query.
      *
-     * Bind column values
-     * Build 'where' clause from String or Array
-     * Add additional SQL
-     * Build query string
-     * Bind column values
-     * Bind 'where' parameters
-     * Execute query
-     *
-     * @param $table
-     * @param $columns
+     * @param string $table
+     * @param array $columns
      * @param bool|string|array $where
-     * @param bool              $limit
+     * @param bool|int $limit
      *
      * @return bool
      */
-    public function update($table, $columns, $where = false, bool $limit = false): bool
+    public function update(string $table, array $columns, $where = false, $limit = false): bool
     {
         $query = "UPDATE $table SET ";
 
@@ -269,7 +256,9 @@ class MyPDO
         }
 
         // Bind Where Params
-        $this->bindWhereParameters($where);
+        if (is_array($where)) {
+            $this->bindWhereParameters($where);
+        }
 
         return $this->execute();
     }
@@ -283,13 +272,13 @@ class MyPDO
      * Bind 'where' parameters
      * Execute query
      *
-     * @param $table
+     * @param string $table
      * @param bool|string|array $where
-     * @param bool              $limit
+     * @param bool|int $limit
      *
      * @return bool
      */
-    public function delete($table, $where = false, bool $limit = false): bool
+    public function delete(string $table, $where = false, $limit = false): bool
     {
         // Build the Query
         $query = "DELETE FROM $table";
@@ -304,13 +293,15 @@ class MyPDO
         $this->stmt = $this->dbh->prepare($query);
 
         // Bind Where Params
-        $this->bindWhereParameters($where);
+        if (is_array($where)) {
+            $this->bindWhereParameters($where);
+        }
 
         return $this->execute();
     }
 
     /**
-     * Num-affected-rows for INSERT/UPDATE/DELETE.
+     * Num-affected-rows for UPDATE/DELETE.
      *
      * @return int
      */
@@ -356,7 +347,7 @@ class MyPDO
     //  ----------------------------------------------------------------
 
     /**
-     * @param $where
+     * @param array|string $where
      *
      * @return string
      */
