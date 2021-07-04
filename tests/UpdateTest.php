@@ -6,7 +6,6 @@ include_once 'BaseTestCase.php';
 
 class UpdateTest extends BaseTestCase
 {
-
     public function testSetupUpdate()
     {
         $this->db->query('DELETE FROM address')->execute();
@@ -24,16 +23,16 @@ class UpdateTest extends BaseTestCase
     public function updateUsingAWhereArray()
     {
         $update = $this->db->update('address', [
-           'postCode' => 'CF20'
+            'postCode' => 'CF20',
         ], [
-            'user' => 2
+            'user' => 2,
         ]);
         $this->assertTrue($update);
         $this->assertEquals(2, $this->db->numRows());
-        $this->assertEquals(4,$this->countAddresses());
-        $this->assertEquals(2,$this->countAddressesWhere(['user' => 1]));
-        $this->assertEquals(3,$this->countAddressesWhere(['postCode' => 'CF20']));
-        $this->assertEquals(1,$this->countAddressesWhere(['postCode' => 'CF20', 'user' => 1]));
+        $this->assertEquals(4, $this->countAddresses());
+        $this->assertEquals(2, $this->countAddressesWhere(['user' => 1]));
+        $this->assertEquals(3, $this->countAddressesWhere(['postCode' => 'CF20']));
+        $this->assertEquals(1, $this->countAddressesWhere(['postCode' => 'CF20', 'user' => 1]));
     }
 
     /**
@@ -42,13 +41,13 @@ class UpdateTest extends BaseTestCase
     public function updateUsingAWhereString()
     {
         $update = $this->db->update('address', [
-            'postCode' => 'CF30'
+            'postCode' => 'CF30',
         ], "WHERE address LIKE '%additional%'");
         $this->assertTrue($update);
         $this->assertEquals(2, $this->db->numRows());
-        $this->assertEquals(4,$this->countAddresses());
-        $this->assertEquals(2,$this->countAddressesWhere(['postCode' => 'CF30']));
-        $this->assertEquals(1,$this->countAddressesWhere(['postCode' => 'CF30', 'user' => 1]));
+        $this->assertEquals(4, $this->countAddresses());
+        $this->assertEquals(2, $this->countAddressesWhere(['postCode' => 'CF30']));
+        $this->assertEquals(1, $this->countAddressesWhere(['postCode' => 'CF30', 'user' => 1]));
     }
 
     /**
@@ -67,7 +66,7 @@ class UpdateTest extends BaseTestCase
     {
         $this->expectException(PDOException::class);
         $this->db->update('address', [
-            'wrong_column_name' => true
+            'wrong_column_name' => true,
         ]);
     }
 
@@ -78,32 +77,31 @@ class UpdateTest extends BaseTestCase
     {
         $this->expectException(PDOException::class);
         $this->db->update('wrong_table', [
-            'wrong_column_name' => true
+            'wrong_column_name' => true,
         ]);
     }
 
     private function countAddresses(): int
     {
         $result = $this->db->query('SELECT * FROM address')->fetchAll();
+
         return count($result);
     }
 
     private function countAddressesWhere(array $where): int
     {
         $where_sql = [];
-        foreach(array_keys($where) as $key) {
+        foreach (array_keys($where) as $key) {
             $where_sql[] = "$key = :$key";
         }
         $sql = 'SELECT * FROM address WHERE '.implode(' AND ', $where_sql);
 
         $this->db->query($sql);
-        foreach($where as $key => $value) {
+        foreach ($where as $key => $value) {
             $this->db->bind($key, $value);
         }
         $result = $this->db->fetchAll();
+
         return count($result);
     }
-
-
-
 }

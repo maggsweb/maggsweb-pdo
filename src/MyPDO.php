@@ -201,7 +201,7 @@ class MyPDO
      * Insert Query.
      *
      * @param string $table
-     * @param array $columns
+     * @param array  $columns
      *
      * @return bool
      */
@@ -227,10 +227,10 @@ class MyPDO
     /**
      * Update Query.
      *
-     * @param string $table
-     * @param array $columns
+     * @param string            $table
+     * @param array             $columns
      * @param bool|string|array $where
-     * @param bool|int $limit
+     * @param bool|int          $limit
      *
      * @return bool
      */
@@ -272,9 +272,9 @@ class MyPDO
      * Bind 'where' parameters
      * Execute query
      *
-     * @param string $table
+     * @param string            $table
      * @param bool|string|array $where
-     * @param bool|int $limit
+     * @param bool|int          $limit
      *
      * @return bool
      */

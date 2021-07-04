@@ -6,7 +6,6 @@ include_once 'BaseTestCase.php';
 
 class DeleteTest extends BaseTestCase
 {
-
     public function testSetupDelete()
     {
         $this->db->query('DELETE FROM address')->execute();
@@ -24,11 +23,11 @@ class DeleteTest extends BaseTestCase
     public function deleteUsingAWhereArray()
     {
         $delete = $this->db->delete('address', [
-           'postCode' => 'CF20'
+            'postCode' => 'CF20',
         ]);
         $this->assertTrue($delete);
         $this->assertEquals(2, $this->db->numRows());
-        $this->assertEquals(2,$this->countAddresses());
+        $this->assertEquals(2, $this->countAddresses());
     }
 
     /**
@@ -40,7 +39,7 @@ class DeleteTest extends BaseTestCase
         $delete = $this->db->delete('address', "WHERE address LIKE '%Chris%'");
         $this->assertTrue($delete);
         $this->assertEquals(1, $this->db->numRows());
-        $this->assertEquals(1,$this->countAddresses());
+        $this->assertEquals(1, $this->countAddresses());
     }
 
     /**
@@ -50,17 +49,14 @@ class DeleteTest extends BaseTestCase
     {
         $this->expectException(PDOException::class);
         $this->db->delete('wrong_table', [
-            'wrong_column_name' => true
+            'wrong_column_name' => true,
         ]);
     }
 
     private function countAddresses(): int
     {
         $result = $this->db->query('SELECT * FROM address')->fetchAll();
+
         return count($result);
     }
-
-
-
-
 }
