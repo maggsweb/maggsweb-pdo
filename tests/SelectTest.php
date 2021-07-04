@@ -6,7 +6,6 @@ include_once 'BaseTestCase.php';
 
 class SelectTest extends BaseTestCase
 {
-
     /**
      * @test
      */
@@ -24,7 +23,7 @@ class SelectTest extends BaseTestCase
     public function selectAllRowsAsArrays()
     {
         $result = $this->db->query('SELECT * FROM users')->fetchAll('Array');
-        $this->assertCount(4,$result);
+        $this->assertCount(4, $result);
         $this->assertIsNotObject($result[1]);
         $this->assertIsArray($result[1]);
     }
@@ -37,7 +36,7 @@ class SelectTest extends BaseTestCase
         $result = $this->db->query('SELECT * FROM users WHERE id = 1')->fetchRow();
         $this->assertIsObject($result);
         $this->assertIsNotArray($result);
-        $object = new StdClass;
+        $object = new StdClass();
         $object->id = '1';
         $object->name = 'Clare';
         $object->age = '50';
@@ -53,9 +52,9 @@ class SelectTest extends BaseTestCase
         $this->assertIsNotObject($result);
         $this->assertIsArray($result);
         $array = [
-            'id' => '1',
+            'id'   => '1',
             'name' => 'Clare',
-            'age' => '50'
+            'age'  => '50',
         ];
         $this->assertEquals($array, $result);
     }
@@ -69,7 +68,7 @@ class SelectTest extends BaseTestCase
         $this->assertIsNotObject($result);
         $this->assertIsNotArray($result);
         $this->assertIsString($result);
-        $this->assertEquals('Clare',$result);
+        $this->assertEquals('Clare', $result);
     }
 
     /**
@@ -86,7 +85,7 @@ class SelectTest extends BaseTestCase
         $this->assertIsObject($result[0]);
         $this->assertIsNotArray($result[0]);
 
-        $object = new StdClass;
+        $object = new StdClass();
         $object->id = '2';
         $object->name = 'Chris';
         $object->age = '40';
@@ -114,7 +113,4 @@ class SelectTest extends BaseTestCase
         $this->assertIsObject($result[1]);
         $this->assertIsNotArray($result[1]);
     }
-
-
-
 }
