@@ -266,12 +266,6 @@ class MyPDO
     /**
      * Delete Query.
      *
-     * Build 'where' clause from String or Array
-     * Add additional SQL
-     * Build query string
-     * Bind 'where' parameters
-     * Execute query
-     *
      * @param string            $table
      * @param bool|string|array $where
      * @param bool|int          $limit
