@@ -8,12 +8,14 @@
  * @copyright Copyright (c)2016
  * @license   http://opensource.org/licenses/gpl-3.0.html GNU Public License
  *
- * @version   1.1
+ * @version   1.2
  **/
 
 namespace Maggsweb;
 
 use PDO;
+use PDOException;
+use PDOStatement;
 
 class MyPDO
 {
@@ -50,36 +52,38 @@ class MyPDO
      *
      * @var object
      */
-    private $dbh;
+    protected $dbh;
 
     /**
      * Error message.
      *
      * @var string
      */
-    private $error;
+    protected $error;
 
     /**
      * Query statement.
      *
-     * @var string
+     * @var PDOStatement
      */
-    private $stmt;
+    protected $stmt;
 
     /**
      * MyPDO constructor.
      *
-     * @param $host
-     * @param $user
-     * @param $pass
-     * @param $dbname
+     * @param string $host
+     * @param string $user
+     * @param string $pass
+     * @param string $dbname
      */
-    public function __construct($host, $user, $pass, $dbname)
+    public function __construct(string $host, string $user, string $pass, string $dbname)
     {
         $this->host = $host;
         $this->user = $user;
         $this->pass = $pass;
         $this->dbname = $dbname;
+        $this->error = false;
+        $this->dbh = null;
 
         $options = [
             // This option sets the connection type to the database to be persistent.
@@ -94,9 +98,7 @@ class MyPDO
 
         try {
             $this->dbh = new PDO("mysql:host=$this->host;dbname=$this->dbname", $this->user, $this->pass, $options);
-            $this->error = false;
         } catch (PDOException $e) {
-            $this->dbh = null;
             $this->error = $e->getMessage();
         }
     }
@@ -108,7 +110,7 @@ class MyPDO
      *
      * @return $this
      */
-    public function query($query)
+    public function query($query): MyPDO
     {
         $this->stmt = $this->dbh->prepare($query);
 
@@ -124,24 +126,11 @@ class MyPDO
      *
      * @return $this
      */
-    public function bind($param, $value, $type = null)
+    public function bind($param, $value, $type = null): MyPDO
     {
-        if (is_null($type)) {
-            switch (true) {
-                case is_int($value):
-                    $type = PDO::PARAM_INT;
-                    break;
-                case is_bool($value):
-                    $type = PDO::PARAM_BOOL;
-                    break;
-                case is_null($value):
-                    $type = PDO::PARAM_NULL;
-                    break;
-                default:
-                    $type = PDO::PARAM_STR;
-            }
-        }
-        $this->stmt->bindValue($param, $value, $type);
+        $paramType = $type ?? $this->getType($value);
+
+        $this->stmt->bindValue($param, $value, $paramType);
 
         return $this;
     }
@@ -151,7 +140,7 @@ class MyPDO
      *
      * @return bool
      */
-    public function execute()
+    public function execute(): bool
     {
         try {
             $this->stmt->execute();
@@ -167,16 +156,15 @@ class MyPDO
      *
      * @param string $type
      *
-     * @return mixed
+     * @return array
      */
-    public function fetchAll($type = 'Object')
+    public function fetchAll(string $type = 'Object'): array
     {
         $this->execute();
-        if ($type == 'Array') {
-            return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
-        } else {
-            return $this->stmt->fetchAll(PDO::FETCH_OBJ);
-        }
+
+        return $type == 'Array'
+            ? $this->stmt->fetchAll(PDO::FETCH_ASSOC)
+            : $this->stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
     /**
@@ -186,14 +174,13 @@ class MyPDO
      *
      * @return mixed
      */
-    public function fetchRow($type = 'Object')
+    public function fetchRow(string $type = 'Object')
     {
         $this->execute();
-        if ($type == 'Array') {
-            return $this->stmt->fetch(PDO::FETCH_ASSOC);
-        } else {
-            return $this->stmt->fetchObject();
-        }
+
+        return $type == 'Array'
+            ? $this->stmt->fetch(PDO::FETCH_ASSOC)
+            : $this->stmt->fetchObject();
     }
 
     /**
@@ -204,6 +191,7 @@ class MyPDO
     public function fetchOne()
     {
         $this->execute();
+
         $row = $this->stmt->fetch(PDO::FETCH_ASSOC);
 
         return array_values($row)[0];
@@ -212,18 +200,12 @@ class MyPDO
     /**
      * Insert Query.
      *
-     * Build 'column string' from $column Array
-     * Bind  'column values' from $column Array
-     * Build query string
-     * Bind column values
-     * Execute query
-     *
-     * @param $table
-     * @param $columns
+     * @param string $table
+     * @param array  $columns
      *
      * @return bool
      */
-    public function insert($table, $columns)
+    public function insert(string $table, array $columns): bool
     {
         $columnString = $this->buildColumnString($columns);
         $binderString = $this->buildBindString($columns);
@@ -245,23 +227,14 @@ class MyPDO
     /**
      * Update Query.
      *
-     * Bind column values
-     * Build 'where' clause from String or Array
-     * Add aditional SQL
-     * Build query string
-     * Bind column values
-     * Bind 'where' parameters
-     * Execute query
-     *
-     * @param $table
-     * @param $columns
-     * @param bool $where This can be passed as a String, or asd an Array
-     *                    The Array type is only for use when all WHERE operators are '='
-     * @param bool $limit
+     * @param string            $table
+     * @param array             $columns
+     * @param bool|string|array $where
+     * @param bool|int          $limit
      *
      * @return bool
      */
-    public function update($table, $columns, $where = false, $limit = false)
+    public function update(string $table, array $columns, $where = false, $limit = false): bool
     {
         $query = "UPDATE $table SET ";
 
@@ -272,10 +245,7 @@ class MyPDO
         $query .= $this->buildWhereString($where);
 
         // Build LIMIT
-        if ($limit) {
-            $limitInt = (int) $limit;
-            $query .= " LIMIT $limitInt";
-        }
+        $query .= $limit ? ' LIMIT '.(int) $limit : '';
 
         // Prepare Query
         $this->stmt = $this->dbh->prepare($query);
@@ -286,7 +256,9 @@ class MyPDO
         }
 
         // Bind Where Params
-        $this->bindWhereParameters($where);
+        if (is_array($where)) {
+            $this->bindWhereParameters($where);
+        }
 
         return $this->execute();
     }
@@ -294,19 +266,13 @@ class MyPDO
     /**
      * Delete Query.
      *
-     * Build 'where' clause from String or Array
-     * Add aditional SQL
-     * Build query string
-     * Bind 'where' parameters
-     * Execute query
-     *
-     * @param $table
-     * @param bool $where
-     * @param bool $limit
+     * @param string            $table
+     * @param bool|string|array $where
+     * @param bool|int          $limit
      *
      * @return bool
      */
-    public function delete($table, $where = false, $limit = false)
+    public function delete(string $table, $where = false, $limit = false): bool
     {
         // Build the Query
         $query = "DELETE FROM $table";
@@ -315,34 +281,33 @@ class MyPDO
         $query .= $this->buildWhereString($where);
 
         // Build LIMIT
-        if ($limit) {
-            $limitInt = (int) $limit;
-            $query .= " LIMIT $limitInt";
-        }
+        $query .= $limit ? ' LIMIT '.(int) $limit : '';
 
         // Prepare Query
         $this->stmt = $this->dbh->prepare($query);
 
         // Bind Where Params
-        $this->bindWhereParameters($where);
+        if (is_array($where)) {
+            $this->bindWhereParameters($where);
+        }
 
         return $this->execute();
     }
 
     /**
-     * Num-affected-rows for INSERT/UPDATE/DELETE.
+     * Num-affected-rows for UPDATE/DELETE.
      *
-     * @return mixed
+     * @return int
      */
-    public function numRows()
+    public function numRows(): int
     {
         return $this->stmt->rowCount();
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function insertID()
+    public function insertID(): int
     {
         return $this->dbh->lastInsertId();
     }
@@ -355,15 +320,18 @@ class MyPDO
         return $this->stmt->debugDumpParams();
     }
 
-    public function getError()
+    /**
+     * @return string
+     */
+    public function getError(): string
     {
         return $this->error;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getQuery()
+    public function getQuery(): string
     {
         return $this->stmt->queryString;
     }
@@ -373,11 +341,11 @@ class MyPDO
     //  ----------------------------------------------------------------
 
     /**
-     * @param $where
+     * @param array|string $where
      *
      * @return string
      */
-    private function buildWhereString($where)
+    private function buildWhereString($where): string
     {
         $whereString = '';
         if ($where) {
@@ -402,7 +370,7 @@ class MyPDO
     /**
      * @param array $where
      */
-    private function bindWhereParameters($where)
+    private function bindWhereParameters(array $where)
     {
         if ($where) {
             if (is_array($where)) {
@@ -418,16 +386,14 @@ class MyPDO
      *
      * @return string
      */
-    private function buildColumnBindString($columns)
+    private function buildColumnBindString(array $columns): string
     {
-        if ($columns && is_array($columns)) {
-            $binders = [];
-            foreach ($columns as $key => $value) {
-                $binders[] = "$key = :column_$key";
-            }
-
-            return (string) implode(', ', $binders);
+        $binders = [];
+        foreach ($columns as $key => $value) {
+            $binders[] = "$key = :column_$key";
         }
+
+        return implode(', ', $binders);
     }
 
     /**
@@ -435,14 +401,14 @@ class MyPDO
      *
      * @return string
      */
-    private function buildColumnString($columns)
+    private function buildColumnString(array $columns): string
     {
         $tmp = [];
         foreach ($columns as $key => $value) {
             $tmp[] = $key;
         }
 
-        return (string) implode(', ', $tmp);
+        return implode(', ', $tmp);
     }
 
     /**
@@ -450,13 +416,32 @@ class MyPDO
      *
      * @return string
      */
-    private function buildBindString($columns)
+    private function buildBindString($columns): string
     {
         $tmp = [];
         foreach ($columns as $key => $value) {
             $tmp[] = ':column_'.$key;
         }
 
-        return (string) implode(', ', $tmp);
+        return implode(', ', $tmp);
+    }
+
+    /**
+     * @param $value
+     *
+     * @return int|null
+     */
+    private function getType($value): ?int
+    {
+        switch (true) {
+            case is_int($value):
+                return PDO::PARAM_INT;
+            case is_bool($value):
+                return PDO::PARAM_BOOL;
+            case is_null($value):
+                return PDO::PARAM_NULL;
+            default:
+                return PDO::PARAM_STR;
+        }
     }
 }
