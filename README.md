@@ -125,7 +125,7 @@ $result = $db->insert($table,$columns);
 
 ```php
 if($result){
-    echo $db->numRows() . ' records affected';
+    echo 'Record inserted';
 } else {
     echo $db->getError();
 }
@@ -213,18 +213,3 @@ if($result){
     echo $db->getError();
 }
 ```
-
-
-
-
-<hr>
-More examples are provided in 'examples.php'
-
-
-
-
-
-
-
-
-
