@@ -64,7 +64,6 @@ $db->query($sql);
 $results = $db->fetchAll();           // Multiple rows, returned and an Object Array
 $results = $db->fetchAll('Array');    // Multiple rows, returned as a multi-dimensional array
 
-
 $sql = "SELECT * FROM `names` LIMIT 1";
 $db->query($sql);
 
