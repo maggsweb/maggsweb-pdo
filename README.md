@@ -41,9 +41,9 @@ To execute a string of SQL, pass the complete SQL string to **->query**
 
 ```php
 $sql = "INSERT INTO `names` VALUES 
-    (NULL, 'Joe',  'Bloggs'),
-    (NULL, 'John', 'Bloggs'),
-    (NULL, 'Jane', 'Bloggs');";
+            (NULL, 'Joe',  'Bloggs'),
+            (NULL, 'John', 'Bloggs'),
+            (NULL, 'Jane', 'Bloggs');";
 
 $db->query($sql);
 
@@ -107,8 +107,8 @@ $results = $db->query("SELECT * FROM `names` WHERE firstname = :firstname")
 On failure, call **->getError** to display the SQL error message
 
 ```php
-if($results){
-    foreach($results as $result){
+if ($results) {
+    foreach ($results as $result) {
         echo $result->{$column};
     }
 } else {
@@ -125,7 +125,7 @@ if($results){
 
 ```php
 $table   = 'names';
-$columns = array('firstname' => 'Fred', 'surname' => 'Bloggs');
+$columns = ['firstname' => 'Fred', 'surname' => 'Bloggs'];
 
 $result = $db->insert($table,$columns);
 ```
@@ -133,7 +133,7 @@ $result = $db->insert($table,$columns);
 ### Insert Results
 
 ```php
-if($result){
+if ($result) {
     echo 'Record inserted';
 } else {
     echo $db->getError();
@@ -157,19 +157,19 @@ $id = $db->insertID();
 
 ```php
 $table   = 'names';
-$columns = array('firstname' => 'Fred', 'surname' => 'Bloggs');
+$columns = ['firstname' => 'Fred', 'surname' => 'Bloggs'];
 
-$result = $db->update($table,$columns);
+$result = $db->update($table, $columns);
 ```
 
 #### Update records using 'bind' params and 'where' string
 
 ```php
 $table   = 'names';
-$columns = array('firstname' => 'Fred 2', 'surname' => 'Bloggs 2');
-$where   = "firstname = 'Fred' AND surname = 'Bloggs'";  //'WHERE' is not needed, or spaces
+$columns = ['firstname' => 'Fred 2', 'surname' => 'Bloggs 2';
+$where   = "firstname = 'Fred' AND surname = 'Bloggs'";  //'WHERE' is not needed
 
-$result = $db->update($table,$columns,$where);
+$result = $db->update($table, $columns, $where);
 ```
 
 
@@ -184,7 +184,7 @@ $result = $db->update($table,$columns,$where);
 
 ### Update Results
 ```php
-if($result){
+if ($result) {
     echo $db->numRows() . ' records affected';
 } else {
     echo $db->getError();
@@ -202,21 +202,21 @@ if($result){
 $table  = 'names';
 $where  = "surname = 'Doe'";
 
-$result = $db->delete($table,$where);
+$result = $db->delete($table, $where);
 ```
 
 #### Delete records using a 'where' array
 
 ```php
 $table = 'names';
-$where = array('surname' => 'Doe');
+$where = ['surname' => 'Doe'];
 
-$result = $db->delete($table,$where);
+$result = $db->delete($table, $where);
 ```
 
 ### Delete Results
 ```php
-if($result){
+if ($result) {
     echo $db->numRows() . ' records affected';
 } else {
     echo $db->getError();
