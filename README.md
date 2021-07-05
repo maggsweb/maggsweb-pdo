@@ -59,14 +59,22 @@ To return the results from **->query** for use call **->fetchAll()** for multipl
 
 ```php
 $sql = "SELECT * FROM `names`";
-
 $db->query($sql);
 
-$results = $db->fetchAll();             // Multiple rows
-//$result  = $db->fetchRow();           // Single row
-//$result  = $db->fetchRow('Array');    // Single row, returned as an array
-//$result  = $db->fetchAll('Array');    // Multiple rows, returned as a multi-dimensional array
-//$result  = $db->fetchOne();           // Single value
+$results = $db->fetchAll();           // Multiple rows, returned and an Object Array
+$results = $db->fetchAll('Array');    // Multiple rows, returned as a multi-dimensional array
+
+
+$sql = "SELECT * FROM `names` LIMIT 1";
+$db->query($sql);
+
+$result  = $db->fetchRow();           // Single row, returned as an Object
+$result  = $db->fetchRow('Array');    // Single row, returned as an Array
+
+$sql = "SELECT name FROM `names` LIMIT 1";
+$db->query($sql);
+
+$result  = $db->fetchOne();           // Single value, returned as a String
 ```
 
 On success, **$result** will be an Object Array (fetchAll) or an Object (fetchRow) or a value (fetchOne)
