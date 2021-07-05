@@ -94,9 +94,11 @@ $db->bind(':firstname', 'Chris');
 
 $results = $db->fetchAll(); 
 
-or
+// or
 
-$results = $db->query($sql)->bind(':firstname', 'Chris')->fetchAll();
+$results = $db->query("SELECT * FROM `names` WHERE firstname = :firstname")
+              ->bind(':firstname', 'Chris')
+              ->fetchAll();
 
 ```
 
