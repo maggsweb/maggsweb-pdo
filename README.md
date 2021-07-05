@@ -127,7 +127,7 @@ if ($results) {
 $table   = 'names';
 $columns = ['firstname' => 'Fred', 'surname' => 'Bloggs'];
 
-$result = $db->insert($table,$columns);
+$result = $db->insert($table, $columns);
 ```
 
 ### Insert Results
