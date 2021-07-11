@@ -6,6 +6,13 @@ include_once 'BaseTestCase.php';
 
 class InsertTest extends BaseTestCase
 {
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->db->query('DELETE FROM address')->execute();
+    }
+
     /**
      * @test
      */
@@ -30,7 +37,7 @@ class InsertTest extends BaseTestCase
         ]);
         $this->assertTrue($insert);
         $this->assertIsInt($this->db->insertID());
-        $this->assertEquals(2, $this->db->insertID());
+        $this->assertEquals(1, $this->db->insertID());
     }
 
     /**
@@ -49,12 +56,10 @@ class InsertTest extends BaseTestCase
      */
     public function insertFailsGracefully__ColumnValidation()
     {
-        $insert = $this->db->insert('address', [
-            'address' => 'A valid address string',
+        $this->expectException(PDOException::class);
+        $this->db->insert('address', [
+            'wrong_column' => 'A valid address string',
         ]);
-        $this->assertFalse($insert);
-        $this->assertEquals(2, $this->countAddresses());
-        $this->assertStringContainsString('address.user', $this->db->getError());
     }
 
     private function countAddresses(): int
