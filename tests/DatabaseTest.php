@@ -60,5 +60,4 @@ class DatabaseTest extends BaseTestCase
 
         $this->assertEquals($query_1, $query_2);
     }
-
 }
