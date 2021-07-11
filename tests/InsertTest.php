@@ -6,7 +6,6 @@ include_once 'BaseTestCase.php';
 
 class InsertTest extends BaseTestCase
 {
-
     public function setUp(): void
     {
         parent::setUp();
