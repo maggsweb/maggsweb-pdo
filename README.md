@@ -25,11 +25,8 @@ define('DBUSER', '');  //eg: root
 define('DBNAME', '');  //eg: admin
 define('DBPASS', '');  //eg: password
 
-require_once ('MyPDO.php');
-
-$db = new MyPDO(DBHOST, DBUSER, DBNAME, DBPASS);
+$db = new \Maggsweb\MyPDO(DBHOST, DBUSER, DBNAME, DBPASS);
 ```
-
 
 <hr>
 
@@ -50,8 +47,6 @@ $db->query($sql);
 $result = $db->execute();
 ```
 Call **->execute** to execute the query.  This returns true|false;
-
-
 
 #### Run a query and return the results
 
@@ -107,7 +102,6 @@ if($results){
 }
 ```
 
-
 <hr>
 
 ## Insert Records
@@ -116,7 +110,7 @@ if($results){
 
 ```php
 $table   = 'names';
-$columns = array('firstname' => 'Fred', 'surname' => 'Bloggs');
+$columns = ['firstname' => 'Fred', 'surname' => 'Bloggs'];
 
 $result = $db->insert($table,$columns);
 ```
@@ -124,21 +118,16 @@ $result = $db->insert($table,$columns);
 ### Insert Results
 
 ```php
-if($result){
-    echo $db->numRows() . ' records affected';
-} else {
-    echo $db->getError();
-}
+echo $result
+    ? $db->numRows() . ' records affected'
+    : $db->getError();
 ```
 
 ### Last Insert ID
 
 ```php
-
 $id = $db->insertID();
-
 ```
-
 
 <hr>
 
@@ -148,7 +137,7 @@ $id = $db->insertID();
 
 ```php
 $table   = 'names';
-$columns = array('firstname' => 'Fred', 'surname' => 'Bloggs');
+$columns = ['firstname' => 'Fred', 'surname' => 'Bloggs';
 
 $result = $db->update($table,$columns);
 ```
@@ -157,7 +146,7 @@ $result = $db->update($table,$columns);
 
 ```php
 $table   = 'names';
-$columns = array('firstname' => 'Fred 2', 'surname' => 'Bloggs 2');
+$columns = ['firstname' => 'Fred 2', 'surname' => 'Bloggs 2'];
 $where   = "firstname = 'Fred' AND surname = 'Bloggs'";  //'WHERE' is not needed, or spaces
 
 $result = $db->update($table,$columns,$where);
@@ -167,21 +156,18 @@ $result = $db->update($table,$columns,$where);
 #### Update specific records using 'bind' params and 'where'
 ```php
 $table   = 'names';
-$columns = array('firstname' => 'Fred 2', 'surname' => 'Bloggs 2');
-$where   = array('firstname' => 'Fred',   'surname' => 'Bloggs');
+$columns = ['firstname' => 'Fred 2', 'surname' => 'Bloggs 2'];
+$where   = ['firstname' => 'Fred',   'surname' => 'Bloggs'];
 
 $result = $db->update($table,$columns,$where);
 ```
 
 ### Update Results
 ```php
-if($result){
-    echo $db->numRows() . ' records affected';
-} else {
-    echo $db->getError();
-}
+echo $result
+    ? $db->numRows() . ' records affected'
+    : $db->getError();
 ```
-
 
 <hr>
 
@@ -200,31 +186,14 @@ $result = $db->delete($table,$where);
 
 ```php
 $table = 'names';
-$where = array('surname' => 'Doe');
+$where = ['surname' => 'Doe'];
 
 $result = $db->delete($table,$where);
 ```
 
 ### Delete Results
 ```php
-if($result){
-    echo $db->numRows() . ' records affected';
-} else {
-    echo $db->getError();
-}
+echo $result
+    ? $db->numRows() . ' records affected'
+    : $db->getError();
 ```
-
-
-
-
-<hr>
-More examples are provided in 'examples.php'
-
-
-
-
-
-
-
-
-
