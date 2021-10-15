@@ -25,9 +25,7 @@ define('DBUSER', '');  //eg: root
 define('DBNAME', '');  //eg: admin
 define('DBPASS', '');  //eg: password
 
-require_once ('MyPDO.php');
-
-$db = new MyPDO(DBHOST, DBUSER, DBNAME, DBPASS);
+$db = new \Maggsweb\MyPDO(DBHOST, DBUSER, DBNAME, DBPASS);
 ```
 
 
@@ -59,6 +57,7 @@ To return the results from **->query** for use call **->fetchAll()** for multipl
 
 ```php
 $sql = "SELECT * FROM `names`";
+
 $db->query($sql);
 
 $results = $db->fetchAll();           // Multiple rows, returned and an Object Array
@@ -133,11 +132,9 @@ $result = $db->insert($table, $columns);
 ### Insert Results
 
 ```php
-if ($result) {
-    echo 'Record inserted';
-} else {
-    echo $db->getError();
-}
+echo $result
+    ? $db->numRows() . ' records affected'
+    : $db->getError();
 ```
 
 ### Last Insert ID
@@ -176,19 +173,17 @@ $result = $db->update($table, $columns, $where);
 #### Update specific records using 'bind' params and 'where'
 ```php
 $table   = 'names';
-$columns = array('firstname' => 'Fred 2', 'surname' => 'Bloggs 2');
-$where   = array('firstname' => 'Fred',   'surname' => 'Bloggs');
+$columns = ['firstname' => 'Fred 2', 'surname' => 'Bloggs 2'];
+$where   = ['firstname' => 'Fred',   'surname' => 'Bloggs'];
 
 $result = $db->update($table,$columns,$where);
 ```
 
 ### Update Results
 ```php
-if ($result) {
-    echo $db->numRows() . ' records affected';
-} else {
-    echo $db->getError();
-}
+echo $result
+    ? $db->numRows() . ' records affected'
+    : $db->getError();
 ```
 
 
@@ -216,9 +211,7 @@ $result = $db->delete($table, $where);
 
 ### Delete Results
 ```php
-if ($result) {
-    echo $db->numRows() . ' records affected';
-} else {
-    echo $db->getError();
-}
+echo $result
+    ? $db->numRows() . ' records affected'
+    : $db->getError();
 ```
