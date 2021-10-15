@@ -25,11 +25,8 @@ define('DBUSER', '');  //eg: root
 define('DBNAME', '');  //eg: admin
 define('DBPASS', '');  //eg: password
 
-require_once ('MyPDO.php');
-
-$db = new MyPDO(DBHOST, DBUSER, DBNAME, DBPASS);
+$db = new Maggsweb\MyPDO((DBHOST, DBUSER, DBNAME, DBPASS);
 ```
-
 
 <hr>
 
