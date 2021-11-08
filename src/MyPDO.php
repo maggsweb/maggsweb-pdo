@@ -5,10 +5,7 @@
  * @category  Database Access
  *
  * @author    Chris Maggs <git@maggsweb.co.uk>
- * @copyright Copyright (c)2016
  * @license   http://opensource.org/licenses/gpl-3.0.html GNU Public License
- *
- * @version   1.2
  **/
 
 namespace Maggsweb;
@@ -69,38 +66,56 @@ class MyPDO
     protected $stmt;
 
     /**
+     * PDO Options
+     *
+     * @var array
+     */
+    protected $options;
+
+    /**
      * MyPDO constructor.
      *
      * @param string $host
      * @param string $user
      * @param string $pass
      * @param string $dbname
+     * @param array $overrides
      */
-    public function __construct(string $host, string $user, string $pass, string $dbname)
+    public function __construct(string $host, string $user, string $pass, string $dbname, array $overrides = [])
     {
         $this->host = $host;
         $this->user = $user;
         $this->pass = $pass;
         $this->dbname = $dbname;
+        $this->options = $this->setOptions($overrides);
         $this->error = false;
         $this->dbh = null;
 
-        $options = [
-            // This option sets the connection type to the database to be persistent.
-            // Persistent database connections can increase performance by checking to see
-            // if there is already an established connection to the database.
-            PDO::ATTR_PERSISTENT => true,
-            // Using ERRMODE_EXCEPTION will throw an exception if an error occurs.
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            // Force UTF8 encoding throughout
-            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
-        ];
-
         try {
-            $this->dbh = new PDO("mysql:host=$this->host;dbname=$this->dbname", $this->user, $this->pass, $options);
+            $this->dbh = new PDO("mysql:host=$this->host;dbname=$this->dbname", $this->user, $this->pass, $this->options);
         } catch (PDOException $e) {
             $this->error = $e->getMessage();
         }
+    }
+
+    /**
+     * Set PDO Options with overrides
+     *
+     * @param array $overrides
+     * @return array
+     */
+    private function setOptions(array $overrides = []): array
+    {
+        $options = [
+            PDO::ATTR_PERSISTENT => true,
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+        ];
+        // Override option if $override key exists
+        foreach($overrides as $k => $v) {
+            $options[$k] = $v;
+        }
+        return $options;
     }
 
     /**
