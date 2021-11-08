@@ -66,7 +66,7 @@ class MyPDO
     protected $stmt;
 
     /**
-     * PDO Options
+     * PDO Options.
      *
      * @var array
      */
@@ -79,7 +79,7 @@ class MyPDO
      * @param string $user
      * @param string $pass
      * @param string $dbname
-     * @param array $overrides
+     * @param array  $overrides
      */
     public function __construct(string $host, string $user, string $pass, string $dbname, array $overrides = [])
     {
@@ -99,22 +99,24 @@ class MyPDO
     }
 
     /**
-     * Set PDO Options with overrides
+     * Set PDO Options with overrides.
      *
      * @param array $overrides
+     *
      * @return array
      */
     private function setOptions(array $overrides = []): array
     {
         $options = [
-            PDO::ATTR_PERSISTENT => true,
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_PERSISTENT         => true,
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
         ];
         // Override option if $override key exists
-        foreach($overrides as $k => $v) {
+        foreach ($overrides as $k => $v) {
             $options[$k] = $v;
         }
+
         return $options;
     }
 
