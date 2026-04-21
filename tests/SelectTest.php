@@ -36,7 +36,7 @@ class SelectTest extends BaseTestCase
         $result = $this->db->query('SELECT * FROM users WHERE id = 1')->fetchRow();
         $this->assertIsObject($result);
         $this->assertIsNotArray($result);
-        $object = new StdClass();
+        $object = new stdClass();
         $object->id = '1';
         $object->name = 'Clare';
         $object->age = '50';
@@ -85,7 +85,7 @@ class SelectTest extends BaseTestCase
         $this->assertIsObject($result[0]);
         $this->assertIsNotArray($result[0]);
 
-        $object = new StdClass();
+        $object = new stdClass();
         $object->id = '2';
         $object->name = 'Chris';
         $object->age = '40';

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MyPDO Class.
  *
@@ -137,8 +138,8 @@ class MyPDO
     /**
      * Bind a specific column/value.
      *
-     * @param $param
-     * @param $value
+     * @param      $param
+     * @param      $value
      * @param null $type
      *
      * @return $this
@@ -247,7 +248,7 @@ class MyPDO
      * @param string            $table
      * @param array             $columns
      * @param bool|array|string $where
-     * @param bool|int $limit
+     * @param bool|int          $limit
      *
      * @return bool
      */
@@ -285,7 +286,7 @@ class MyPDO
      *
      * @param string            $table
      * @param bool|array|string $where
-     * @param bool|int $limit
+     * @param bool|int          $limit
      *
      * @return bool
      */
@@ -447,9 +448,9 @@ class MyPDO
     private function getType($value): ?int
     {
         return match (true) {
-            is_int($value)  => PDO::PARAM_INT,
-            is_bool($value) => PDO::PARAM_BOOL,
-            is_null($value) => PDO::PARAM_NULL,
+            is_int($value)        => PDO::PARAM_INT,
+            is_bool($value)       => PDO::PARAM_BOOL,
+            is_null($value)       => PDO::PARAM_NULL,
             default               => PDO::PARAM_STR,
         };
     }
