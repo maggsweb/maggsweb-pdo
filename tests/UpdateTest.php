@@ -6,15 +6,14 @@ include_once 'BaseTestCase.php';
 
 class UpdateTest extends BaseTestCase
 {
-    public function testSetupUpdate()
+    public function setUp(): void
     {
+        parent::setUp();
         $this->db->query('DELETE FROM address')->execute();
-        $this->assertEquals(0, $this->countAddresses());
         $this->db->query('INSERT INTO address VALUES (null, 1, "Clare address", "CF10");')->execute();
         $this->db->query('INSERT INTO address VALUES (null, 1, "Clare additional address", "CF20");')->execute();
         $this->db->query('INSERT INTO address VALUES (null, 2, "Chris main address", "CF10");')->execute();
         $this->db->query('INSERT INTO address VALUES (null, 2, "Chris additional address", "CF20");')->execute();
-        $this->assertEquals(4, $this->countAddresses());
     }
 
     /**

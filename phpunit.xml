@@ -19,7 +19,7 @@
             <directory suffix=".php">src</directory>
         </include>
         <report>
-            <html outputDirectory="coverage/html" lowUpperBound="50" highLowerBound="90"/>
+            <html outputDirectory="coverage/html" lowUpperBound="50" highLowerBound="85"/>
         </report>
     </coverage>
 </phpunit>

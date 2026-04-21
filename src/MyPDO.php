@@ -14,6 +14,7 @@ namespace Maggsweb;
 use PDO;
 use PDOException;
 use PDOStatement;
+use RuntimeException;
 
 class MyPDO
 {
@@ -130,6 +131,7 @@ class MyPDO
      */
     public function query($query): MyPDO
     {
+        $this->assertConnected();
         $this->stmt = $this->dbh->prepare($query);
 
         return $this;
@@ -225,6 +227,8 @@ class MyPDO
      */
     public function insert(string $table, array $columns): bool
     {
+        $this->assertConnected();
+
         $columnString = $this->buildColumnString($columns);
         $binderString = $this->buildBindString($columns);
 
@@ -254,6 +258,8 @@ class MyPDO
      */
     public function update(string $table, array $columns, bool|array|string $where = false, bool|int $limit = false): bool
     {
+        $this->assertConnected();
+
         $query = "UPDATE $table SET ";
 
         // Build column bindings
@@ -292,6 +298,8 @@ class MyPDO
      */
     public function delete(string $table, bool|array|string $where = false, bool|int $limit = false): bool
     {
+        $this->assertConnected();
+
         // Build the Query
         $query = "DELETE FROM $table";
 
@@ -327,6 +335,8 @@ class MyPDO
      */
     public function insertID(): string
     {
+        $this->assertConnected();
+
         return $this->dbh->lastInsertId();
     }
 
@@ -357,6 +367,13 @@ class MyPDO
     //  ----------------------------------------------------------------
     //  PRIVATE HELPER FUNCTIONS  --------------------------------------
     //  ----------------------------------------------------------------
+
+    private function assertConnected(): void
+    {
+        if ($this->dbh === null) {
+            throw new RuntimeException($this->error !== '' ? $this->error : 'Database connection not established.');
+        }
+    }
 
     /**
      * @param array|string $where
