@@ -81,6 +81,16 @@ class UpdateTest extends BaseTestCase
         ]);
     }
 
+    /**
+     * @test
+     */
+    public function updateMatchingNoRowsReportsZero()
+    {
+        $update = $this->db->update('address', ['postCode' => 'CF99'], ['user' => 999]);
+        $this->assertTrue($update);
+        $this->assertEquals(0, $this->db->numRows());
+    }
+
     private function countAddresses(): int
     {
         $result = $this->db->query('SELECT * FROM address')->fetchAll();

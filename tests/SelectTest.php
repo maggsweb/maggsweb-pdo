@@ -113,4 +113,51 @@ class SelectTest extends BaseTestCase
         $this->assertIsObject($result[1]);
         $this->assertIsNotArray($result[1]);
     }
+
+    /**
+     * @test
+     */
+    public function fetchOneReturnsNullWhenNoRows()
+    {
+        $result = $this->db->query('SELECT name FROM users WHERE id = 999')->fetchOne();
+        $this->assertNull($result);
+    }
+
+    /**
+     * @test
+     */
+    public function fetchAllReturnsEmptyArrayWhenNoRows()
+    {
+        $result = $this->db->query('SELECT * FROM users WHERE id = 999')->fetchAll();
+        $this->assertIsArray($result);
+        $this->assertCount(0, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function fetchAllAsArrayReturnsEmptyArrayWhenNoRows()
+    {
+        $result = $this->db->query('SELECT * FROM users WHERE id = 999')->fetchAll('Array');
+        $this->assertIsArray($result);
+        $this->assertCount(0, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function fetchRowReturnsFalseWhenNoRows()
+    {
+        $result = $this->db->query('SELECT * FROM users WHERE id = 999')->fetchRow();
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @test
+     */
+    public function fetchRowAsArrayReturnsFalseWhenNoRows()
+    {
+        $result = $this->db->query('SELECT * FROM users WHERE id = 999')->fetchRow('Array');
+        $this->assertFalse($result);
+    }
 }

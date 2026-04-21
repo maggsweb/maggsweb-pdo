@@ -60,4 +60,74 @@ class DatabaseTest extends BaseTestCase
 
         $this->assertEquals($query_1, $query_2);
     }
+
+    /**
+     * @test
+     */
+    public function getErrorIsEmptyByDefault()
+    {
+        $fresh = new MyTestPDO();
+        $this->assertSame('', $fresh->getError());
+    }
+
+    /**
+     * @test
+     */
+    public function bindInfersIntegerType()
+    {
+        $this->db->query('SELECT * FROM users WHERE age = :age')->bind(':age', 40);
+
+        ob_start();
+        $this->db->debugDumpParams();
+        $params = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertStringContainsString('param_type=1', $params);
+    }
+
+    /**
+     * @test
+     */
+    public function bindInfersBooleanType()
+    {
+        $this->db->query('SELECT * FROM users WHERE age = :flag')->bind(':flag', true);
+
+        ob_start();
+        $this->db->debugDumpParams();
+        $params = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertStringContainsString('param_type=5', $params);
+    }
+
+    /**
+     * @test
+     */
+    public function bindInfersNullType()
+    {
+        $this->db->query('SELECT * FROM users WHERE age = :age')->bind(':age', null);
+
+        ob_start();
+        $this->db->debugDumpParams();
+        $params = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertStringContainsString('param_type=0', $params);
+    }
+
+    /**
+     * @test
+     */
+    public function bindAcceptsExplicitType()
+    {
+        $this->db->query('SELECT * FROM users WHERE age = :age')
+            ->bind(':age', 40, PDO::PARAM_STR);
+
+        ob_start();
+        $this->db->debugDumpParams();
+        $params = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertStringContainsString('param_type=2', $params);
+    }
 }

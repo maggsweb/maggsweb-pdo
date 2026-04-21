@@ -53,6 +53,16 @@ class DeleteTest extends BaseTestCase
         ]);
     }
 
+    /**
+     * @test
+     */
+    public function deleteMatchingNoRowsReportsZero()
+    {
+        $delete = $this->db->delete('address', ['user' => 999]);
+        $this->assertTrue($delete);
+        $this->assertEquals(0, $this->db->numRows());
+    }
+
     private function countAddresses(): int
     {
         $result = $this->db->query('SELECT * FROM address')->fetchAll();
