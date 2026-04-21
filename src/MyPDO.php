@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MyPDO Class.
  *
@@ -137,8 +138,8 @@ class MyPDO
     /**
      * Bind a specific column/value.
      *
-     * @param $param
-     * @param $value
+     * @param      $param
+     * @param      $value
      * @param null $type
      *
      * @return $this
