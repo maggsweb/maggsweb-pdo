@@ -22,56 +22,56 @@ class MyPDO
      *
      * @var string
      */
-    private $host;
+    private string $host;
 
     /**
      * Username.
      *
      * @var string
      */
-    private $user;
+    private string $user;
 
     /**
      * Password.
      *
      * @var string
      */
-    private $pass;
+    private string $pass;
 
     /**
      * DB Name.
      *
      * @var string
      */
-    private $dbname;
+    private string $dbname;
 
     /**
      * Database handle.
      *
-     * @var object
+     * @var PDO|null
      */
-    protected $dbh;
+    protected ?PDO $dbh;
 
     /**
      * Error message.
      *
-     * @var string
+     * @var string|bool
      */
-    protected $error;
+    protected string|bool $error;
 
     /**
      * Query statement.
      *
      * @var PDOStatement
      */
-    protected $stmt;
+    protected PDOStatement $stmt;
 
     /**
      * PDO Options.
      *
      * @var array
      */
-    protected $options;
+    protected array $options;
 
     /**
      * MyPDO constructor.
@@ -89,7 +89,7 @@ class MyPDO
         $this->pass = $pass;
         $this->dbname = $dbname;
         $this->options = $this->setOptions($overrides);
-        $this->error = false;
+        $this->error = '';
         $this->dbh = null;
 
         try {
@@ -192,7 +192,7 @@ class MyPDO
      *
      * @return mixed
      */
-    public function fetchRow(string $type = 'Object')
+    public function fetchRow(string $type = 'Object'): mixed
     {
         $this->execute();
 
@@ -206,13 +206,13 @@ class MyPDO
      *
      * @return mixed
      */
-    public function fetchOne()
+    public function fetchOne(): mixed
     {
         $this->execute();
 
         $row = $this->stmt->fetch(PDO::FETCH_ASSOC);
 
-        return array_values($row)[0];
+        return $row ? array_values($row)[0] : null;
     }
 
     /**
@@ -247,12 +247,12 @@ class MyPDO
      *
      * @param string            $table
      * @param array             $columns
-     * @param bool|string|array $where
-     * @param bool|int          $limit
+     * @param bool|array|string $where
+     * @param bool|int $limit
      *
      * @return bool
      */
-    public function update(string $table, array $columns, $where = false, $limit = false): bool
+    public function update(string $table, array $columns, bool|array|string $where = false, bool|int $limit = false): bool
     {
         $query = "UPDATE $table SET ";
 
@@ -285,12 +285,12 @@ class MyPDO
      * Delete Query.
      *
      * @param string            $table
-     * @param bool|string|array $where
-     * @param bool|int          $limit
+     * @param bool|array|string $where
+     * @param bool|int $limit
      *
      * @return bool
      */
-    public function delete(string $table, $where = false, $limit = false): bool
+    public function delete(string $table, bool|array|string $where = false, bool|int $limit = false): bool
     {
         // Build the Query
         $query = "DELETE FROM $table";
@@ -323,17 +323,17 @@ class MyPDO
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function insertID(): int
+    public function insertID(): string
     {
         return $this->dbh->lastInsertId();
     }
 
     /**
-     * @return mixed
+     * @return bool|null
      */
-    public function debugDumpParams()
+    public function debugDumpParams(): ?bool
     {
         return $this->stmt->debugDumpParams();
     }
@@ -343,7 +343,7 @@ class MyPDO
      */
     public function getError(): string
     {
-        return $this->error;
+        return $this->error || '';
     }
 
     /**
@@ -363,7 +363,7 @@ class MyPDO
      *
      * @return string
      */
-    private function buildWhereString($where): string
+    private function buildWhereString(array|string $where): string
     {
         $whereString = '';
         if ($where) {
@@ -388,14 +388,10 @@ class MyPDO
     /**
      * @param array $where
      */
-    private function bindWhereParameters(array $where)
+    private function bindWhereParameters(array $where): void
     {
-        if ($where) {
-            if (is_array($where)) {
-                foreach ($where as $key => $value) {
-                    $this->bind(":where_$key", $value);
-                }
-            }
+        foreach ($where as $key => $value) {
+            $this->bind(":where_$key", $value);
         }
     }
 
@@ -430,11 +426,11 @@ class MyPDO
     }
 
     /**
-     * @param $columns
+     * @param array $columns
      *
      * @return string
      */
-    private function buildBindString($columns): string
+    private function buildBindString(array $columns): string
     {
         $tmp = [];
         foreach ($columns as $key => $value) {
@@ -451,15 +447,11 @@ class MyPDO
      */
     private function getType($value): ?int
     {
-        switch (true) {
-            case is_int($value):
-                return PDO::PARAM_INT;
-            case is_bool($value):
-                return PDO::PARAM_BOOL;
-            case is_null($value):
-                return PDO::PARAM_NULL;
-            default:
-                return PDO::PARAM_STR;
-        }
+        return match (true) {
+            is_int($value)  => PDO::PARAM_INT,
+            is_bool($value) => PDO::PARAM_BOOL,
+            is_null($value) => PDO::PARAM_NULL,
+            default               => PDO::PARAM_STR,
+        };
     }
 }
