@@ -35,8 +35,8 @@ class InsertTest extends BaseTestCase
             'address' => 'Another valid address string',
         ]);
         $this->assertTrue($insert);
-        $this->assertIsInt($this->db->insertID());
-        $this->assertEquals(1, $this->db->insertID());
+        $this->assertIsString($this->db->insertID());
+        $this->assertEquals('1', $this->db->insertID());
     }
 
     /**
@@ -59,6 +59,20 @@ class InsertTest extends BaseTestCase
         $this->db->insert('address', [
             'wrong_column' => 'A valid address string',
         ]);
+    }
+
+    /**
+     * @test
+     */
+    public function insertFailsGracefully__NotNullConstraint()
+    {
+        // `user` column has NOT NULL — prepare succeeds, execute fails,
+        // exercising the try/catch path inside execute().
+        $result = $this->db->insert('address', [
+            'address' => 'missing required user column',
+        ]);
+        $this->assertFalse($result);
+        $this->assertNotEmpty($this->db->getError());
     }
 
     private function countAddresses(): int
