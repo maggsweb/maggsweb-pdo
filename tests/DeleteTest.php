@@ -32,6 +32,7 @@ class DeleteTest extends BaseTestCase
 
     /**
      * @test
+     *
      * @depends deleteUsingAWhereArray
      */
     public function deleteUsingAWhereString()
