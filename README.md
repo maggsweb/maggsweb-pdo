@@ -9,6 +9,7 @@ An easy-to-use PDO Database wrapper for PHP & MySQL
 ### Table of Contents
 **[Initialization](#initialization)**  
 **[Query](#query)**  
+**[Run a script](#run-a-script-of-several-statements)**  
 **[Insert Records](#insert-records)**  
 **[Update Records](#update-records)**  
 **[Delete Records](#delete-records)**  
@@ -27,8 +28,30 @@ define('DBPASS', '');  //eg: password
 
 require_once ('MyPDO.php');
 
-$db = new MyPDO(DBHOST, DBUSER, DBNAME, DBPASS);
+$db = new MyPDO(DBHOST, DBUSER, DBPASS, DBNAME);
 ```
+
+The connection uses `SET NAMES utf8mb4` by default. To change this, or any other PDO option, pass an array of overrides as the fifth argument:
+
+```php
+$db = new MyPDO(DBHOST, DBUSER, DBPASS, DBNAME, [
+    PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES latin1',
+]);
+```
+
+#### One shared connection
+
+Each `new MyPDO(...)` opens its own connection. To use one connection for the whole request, call **MyPDO::initialise** once at startup, then **MyPDO::connection** wherever a handle is needed:
+
+```php
+MyPDO::initialise(DBHOST, DBUSER, DBPASS, DBNAME);  // once, e.g. in bootstrap.php
+
+$db = MyPDO::connection();                             // anywhere after that
+```
+
+`MyPDO::connection()` opens nothing itself. It returns the instance `initialise()` built, and throws a `RuntimeException` if `initialise()` hasn't run. Calling `initialise()` again returns the existing instance. In tests, `MyPDO::setConnection($double)` replaces the instance and `MyPDO::setConnection(null)` clears it.
+
+**One thing to know:** the prepared statement is kept on the instance, so a shared instance means a shared statement. Always chain `query()->bind()->fetch()` as one expression (or as adjacent lines). If you split them so other code can run a query in between, the first caller silently gets the wrong rows. If a query has to stay open across other work, give it its own `new MyPDO(...)`.
 
 
 <hr>
@@ -103,6 +126,19 @@ if($results){
         echo $result->{$column};
     }
 } else {
+    echo $db->getError();
+}
+```
+
+
+#### Run a script of several statements
+
+**->query** prepares its SQL, which only reliably runs the first statement of a multi-statement string. To run a whole file of statements (a migration or a seed file), pass it to **->runScript**. It runs every statement and returns true|false. If any statement fails, it returns false and **->getError** has the reason. Statements before the failing one will already have run. Nothing can be bound and no rows are returned. MySQL only.
+
+```php
+$sql = file_get_contents('migrations/1.2.0.sql');
+
+if (!$db->runScript($sql)) {
     echo $db->getError();
 }
 ```
