@@ -7,6 +7,17 @@
  *
  * @author    Chris Maggs <git@maggsweb.co.uk>
  * @license   http://opensource.org/licenses/gpl-3.0.html GNU Public License
+ *
+ * One connection per request: call MyPDO::initialise() once at startup, then
+ * MyPDO::connection() wherever a handle is needed, rather than `new MyPDO(...)`
+ * in every class (each of which opens its own connection).
+ *
+ * ONE THING TO KNOW: the prepared statement is kept on the instance, so a
+ * shared instance means a shared statement. Always chain
+ * query()->bind()->fetch() as one expression (or as adjacent lines). Split
+ * them so other code can query in between, and the first caller silently
+ * gets the wrong rows. If a query has to stay open across other work, give
+ * it its own `new MyPDO(...)`.
  **/
 
 namespace Maggsweb;
@@ -75,6 +86,60 @@ class MyPDO
     protected array $options;
 
     /**
+     * Shared instance, built by initialise() and returned by connection().
+     *
+     * @var MyPDO|null
+     */
+    private static ?MyPDO $connection = null;
+
+    /**
+     * Build the shared instance. Call once at startup, before connection().
+     *
+     * If a shared instance already exists (an earlier initialise(), or a test
+     * double from setConnection()) it is returned unchanged and no new
+     * connection is made.
+     *
+     * @param string $host
+     * @param string $user
+     * @param string $pass
+     * @param string $dbname
+     * @param array  $overrides
+     *
+     * @return MyPDO
+     */
+    public static function initialise(string $host, string $user, string $pass, string $dbname, array $overrides = []): MyPDO
+    {
+        return self::$connection ??= new self($host, $user, $pass, $dbname, $overrides);
+    }
+
+    /**
+     * The shared instance built by initialise(). Opens nothing itself.
+     *
+     * @throws RuntimeException if initialise() has not been called
+     *
+     * @return MyPDO
+     */
+    public static function connection(): MyPDO
+    {
+        if (self::$connection === null) {
+            throw new RuntimeException('No MyPDO connection: call MyPDO::initialise() first.');
+        }
+
+        return self::$connection;
+    }
+
+    /**
+     * Replace the shared instance, or pass null to forget it. For tests: a
+     * double set here is what every connection() caller gets.
+     *
+     * @param MyPDO|null $instance
+     */
+    public static function setConnection(?MyPDO $instance): void
+    {
+        self::$connection = $instance;
+    }
+
+    /**
      * MyPDO constructor.
      *
      * @param string $host
@@ -109,10 +174,12 @@ class MyPDO
      */
     private function setOptions(array $overrides = []): array
     {
+        // utf8mb4, not utf8: MySQL's utf8 is the 3-byte utf8mb3, so under strict
+        // mode any write carrying a 4-byte character (e.g. an emoji) is refused.
         $options = [
             PDO::ATTR_PERSISTENT         => true,
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4',
         ];
         // Override option if $override key exists
         foreach ($overrides as $k => $v) {
@@ -135,6 +202,40 @@ class MyPDO
         $this->stmt = $this->dbh->prepare($query);
 
         return $this;
+    }
+
+    /**
+     * Run a string of one or more SQL statements, e.g. a migration or seed file.
+     *
+     * query() goes through PDO::prepare(), which only reliably runs the first
+     * statement of a multi-statement string. This sends the whole string with
+     * PDO::query() and steps through every statement's result, so an error in
+     * a later statement is caught rather than silently skipped. Nothing can be
+     * bound and no rows are returned.
+     *
+     * MySQL only. pdo_mysql allows multiple statements by default; to be
+     * explicit, pass [PDO::MYSQL_ATTR_MULTI_STATEMENTS => true] as $overrides.
+     *
+     * @param string $sql
+     *
+     * @return bool false on failure, with the reason in getError()
+     */
+    public function runScript(string $sql): bool
+    {
+        $this->assertConnected();
+
+        try {
+            $this->stmt = $this->dbh->query($sql);
+            while ($this->stmt->nextRowset()) {
+                // no result data needed, just advancing to the next statement
+            }
+        } catch (PDOException $e) {
+            $this->error = $e->getMessage();
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -353,7 +454,7 @@ class MyPDO
      */
     public function getError(): string
     {
-        return $this->error || '';
+        return (string) $this->error;
     }
 
     /**
@@ -465,10 +566,10 @@ class MyPDO
     private function getType($value): ?int
     {
         return match (true) {
-            is_int($value)        => PDO::PARAM_INT,
-            is_bool($value)       => PDO::PARAM_BOOL,
-            is_null($value)       => PDO::PARAM_NULL,
-            default               => PDO::PARAM_STR,
+            is_int($value)    => PDO::PARAM_INT,
+            is_bool($value)   => PDO::PARAM_BOOL,
+            is_null($value)   => PDO::PARAM_NULL,
+            default                 => PDO::PARAM_STR,
         };
     }
 }

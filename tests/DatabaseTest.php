@@ -73,6 +73,19 @@ class DatabaseTest extends BaseTestCase
     /**
      * @test
      */
+    public function getErrorReturnsTheErrorMessage()
+    {
+        $fresh = new MyTestPDO();
+        $fresh->query('CREATE TABLE IF NOT EXISTS errors (id INTEGER PRIMARY KEY)')->execute();
+        $fresh->insert('errors', ['id' => 1]);
+
+        $this->assertFalse($fresh->insert('errors', ['id' => 1]));
+        $this->assertStringContainsString('UNIQUE constraint failed', $fresh->getError());
+    }
+
+    /**
+     * @test
+     */
     public function bindInfersIntegerType()
     {
         $this->db->query('SELECT * FROM users WHERE age = :age')->bind(':age', 40);
