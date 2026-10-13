@@ -89,6 +89,21 @@ class MySqlTest extends TestCase
     /**
      * @test
      */
+    public function runScriptReportsAnErrorInALaterStatementAfterAQuery()
+    {
+        // A prepared statement left on the instance used to hide the error
+        // when runScript() replaced it.
+        $this->db->query('SELECT COUNT(*) FROM mypdo_script')->fetchOne();
+
+        $ok = $this->db->runScript("INSERT INTO mypdo_script VALUES (1, 'one');\nINSERT INTO mypdo_no_such_table VALUES (2);");
+
+        $this->assertFalse($ok);
+        $this->assertStringContainsString("mypdo_no_such_table' doesn't exist", $this->db->getError());
+    }
+
+    /**
+     * @test
+     */
     public function initialiseBuildsTheConnection()
     {
         $connection = MyPDO::initialise(
