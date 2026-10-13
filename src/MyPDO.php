@@ -225,10 +225,15 @@ class MyPDO
         $this->assertConnected();
 
         try {
-            $this->stmt = $this->dbh->query($sql);
-            while ($this->stmt->nextRowset()) {
+            // Into a local first, not straight over $this->stmt: replacing the
+            // previous statement frees it while this one's results are still
+            // pending, and pdo_mysql then loses any error from the second
+            // statement on, so a failing script would report success.
+            $stmt = $this->dbh->query($sql);
+            while ($stmt->nextRowset()) {
                 // no result data needed, just advancing to the next statement
             }
+            $this->stmt = $stmt;
         } catch (PDOException $e) {
             $this->error = $e->getMessage();
 
